@@ -1,4 +1,7 @@
-﻿namespace ClassDiagramBuilder.Models
+﻿using System.CodeDom.Compiler;
+using System.Reflection;
+
+namespace ClassDiagramBuilder.Models
 {
     public class ProjectAnalyzer
     {
@@ -37,6 +40,11 @@
             }
 
             return tree;
+        }
+
+        public void AnalyzeFile(string path)
+        {
+            
         }
     }
 }

@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "MN+GgH8jC0VX2j+75CLCVbj9uR/2ggu1u2iuUdj3ayYn+91a+UGxKzbhCOT//YKDm82MNm6WsGbaVfDtztFD4Q==",
+  "dgSpecHash": "ZzmPxsly+H5FJsJGS5GlCjjO6DKJq9/or+CMR4qHNVaElYFaF0PKGZeBkmojh/yxj+3HbTBGE6G7pwipAeSRzg==",
   "success": true,
   "projectFilePath": "C:\\Users\\Alex Raj\\source\\repos\\ClassDiagramBuilder\\ClassDiagramBuilder\\ClassDiagramBuilder.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\Alex Raj\\.nuget\\packages\\system.codedom\\6.0.0\\system.codedom.6.0.0.nupkg.sha512"
+  ],
   "logs": []
 }

@@ -10,7 +10,7 @@ namespace ClassDiagramBuilder
             int y = 0;
             var projectAnalyzer = new ProjectAnalyzer();
             projectAnalyzer.FileExtensionsToAnalyze = new List<string>(){@".cs"};
-            projectAnalyzer.FoldersToIgnore = new List<string>() { @".git", @".vs" };
+            projectAnalyzer.FoldersToIgnore = new List<string>() { @".git", @".vs", @"bin", @"obj" };
 
             var tree = projectAnalyzer.BuildTree(GetRoot(Environment.CurrentDirectory, 4));
             Console.ReadKey();
