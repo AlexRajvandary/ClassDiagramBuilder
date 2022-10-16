@@ -1,4 +1,4 @@
-﻿namespace ClassDiagramBuilder.Models.TypeAnalyzerModels
+﻿namespace ClassDiagramBuilder.Models
 {
     public enum TypeKind
     {

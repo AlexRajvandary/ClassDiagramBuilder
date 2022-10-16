@@ -1,10 +1,13 @@
 ﻿using System.CodeDom.Compiler;
 using System.Reflection;
+using ClassDiagramBuilder.Models.Parser;
 
 namespace ClassDiagramBuilder.Models
 {
     public class ProjectAnalyzer
     {
+        public List<string> Types { get; set; }
+
         public List<string> FileExtensionsToAnalyze { get; set; }
 
         public List<string> FileExtensionsToIgnore { get; set; }
@@ -44,7 +47,8 @@ namespace ClassDiagramBuilder.Models
 
         public void AnalyzeFile(string path)
         {
-            
+            var typeParser = new TypeParser();
+            typeParser.Parse(path);
         }
     }
 }
