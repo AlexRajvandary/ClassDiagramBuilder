@@ -1,0 +1,12 @@
+C:\Users\Alex Raj\source\repos\ClassDiagramBuilder\ClassDiagramBuilderModels\bin\Debug\net6.0\ClassDiagramBuilder.Models.deps.json
+C:\Users\Alex Raj\source\repos\ClassDiagramBuilder\ClassDiagramBuilderModels\bin\Debug\net6.0\ClassDiagramBuilder.Models.dll
+C:\Users\Alex Raj\source\repos\ClassDiagramBuilder\ClassDiagramBuilderModels\bin\Debug\net6.0\ClassDiagramBuilder.Models.pdb
+C:\Users\Alex Raj\source\repos\ClassDiagramBuilder\ClassDiagramBuilderModels\obj\Debug\net6.0\ClassDiagramBuilder.Models.csproj.AssemblyReference.cache
+C:\Users\Alex Raj\source\repos\ClassDiagramBuilder\ClassDiagramBuilderModels\obj\Debug\net6.0\ClassDiagramBuilder.Models.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Alex Raj\source\repos\ClassDiagramBuilder\ClassDiagramBuilderModels\obj\Debug\net6.0\ClassDiagramBuilder.Models.AssemblyInfoInputs.cache
+C:\Users\Alex Raj\source\repos\ClassDiagramBuilder\ClassDiagramBuilderModels\obj\Debug\net6.0\ClassDiagramBuilder.Models.AssemblyInfo.cs
+C:\Users\Alex Raj\source\repos\ClassDiagramBuilder\ClassDiagramBuilderModels\obj\Debug\net6.0\ClassDiagramBuilder.Models.csproj.CoreCompileInputs.cache
+C:\Users\Alex Raj\source\repos\ClassDiagramBuilder\ClassDiagramBuilderModels\obj\Debug\net6.0\ClassDiagramBuilder.Models.dll
+C:\Users\Alex Raj\source\repos\ClassDiagramBuilder\ClassDiagramBuilderModels\obj\Debug\net6.0\refint\ClassDiagramBuilder.Models.dll
+C:\Users\Alex Raj\source\repos\ClassDiagramBuilder\ClassDiagramBuilderModels\obj\Debug\net6.0\ClassDiagramBuilder.Models.pdb
+C:\Users\Alex Raj\source\repos\ClassDiagramBuilder\ClassDiagramBuilderModels\obj\Debug\net6.0\ref\ClassDiagramBuilder.Models.dll

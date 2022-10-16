@@ -8,7 +8,11 @@ namespace ClassDiagramBuilder
         static void Main(string[] args)
         {
             int y = 0;
-            var tree = ProjectAnalyzer.BuildTree(GetRoot(Environment.CurrentDirectory, 4));
+            var projectAnalyzer = new ProjectAnalyzer();
+            projectAnalyzer.FileExtensionsToAnalyze = new List<string>(){@".cs"};
+            projectAnalyzer.FoldersToIgnore = new List<string>() { @".git", @".vs" };
+
+            var tree = projectAnalyzer.BuildTree(GetRoot(Environment.CurrentDirectory, 4));
             Console.ReadKey();
         }
 

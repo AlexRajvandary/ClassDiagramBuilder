@@ -2,13 +2,22 @@
 {
     public class ProjectAnalyzer
     {
-        public static Node<List<string>> BuildTree(string folder)
+        public List<string> FileExtensionsToAnalyze { get; set; }
+
+        public List<string> FileExtensionsToIgnore { get; set; }
+
+        public List<string> FoldersToIgnore { get; set; }
+
+        public Node<List<string>> BuildTree(string folder)
         {
             var tree = new Node<List<string>>();
             tree.Name = new DirectoryInfo(folder).Name;
             tree.Data = new List<string>();
 
-            var dirs = Directory.GetDirectories(folder);
+            var dirs = FoldersToIgnore == null
+                ? Directory.GetDirectories(folder)
+                : Directory.GetDirectories(folder).Where(folderPath => !FoldersToIgnore.Contains(new DirectoryInfo(folderPath).Name));
+
             foreach (var dir in dirs)
             {
                 var child = BuildTree(dir);
@@ -16,7 +25,11 @@
                 tree.AddNode(child);
             }
 
-            var fileDirs = Directory.GetFiles(folder);
+            var fileDirs = FileExtensionsToAnalyze != null
+                ? Directory.GetFiles(folder).ToList().Where(filePath => FileExtensionsToAnalyze.Contains(Path.GetExtension(filePath)))
+                : FileExtensionsToIgnore != null
+                    ? Directory.GetFiles(folder).ToList().Where(filePath => !FileExtensionsToAnalyze.Contains(Path.GetExtension(filePath)))
+                    : Directory.GetFiles(folder);
 
             foreach (var fileDir in fileDirs)
             {
