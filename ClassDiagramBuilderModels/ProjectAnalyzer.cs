@@ -28,7 +28,7 @@ namespace ClassDiagramBuilder.Models
             {
                 var child = BuildTree(dir);
                 child.Parent = tree;
-                tree.AddNode(child);
+                tree.AddChild(child);
             }
 
             var fileDirs = FileExtensionsToAnalyze != null
@@ -45,10 +45,11 @@ namespace ClassDiagramBuilder.Models
             return tree;
         }
 
-        public void AnalyzeFile(string path)
+        public Node<string> AnalyzeFile(string path)
         {
             var typeParser = new TypeParser();
-            typeParser.Parse(path);
+            var syntaxTree = typeParser.Parse(path);
+            return syntaxTree;
         }
     }
 }
