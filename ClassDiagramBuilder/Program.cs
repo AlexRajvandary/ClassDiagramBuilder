@@ -1,6 +1,4 @@
 ﻿using ClassDiagramBuilder.Models;
-using System.ComponentModel.Design;
-using System.Reflection.Emit;
 
 namespace ClassDiagramBuilder
 {
@@ -13,9 +11,9 @@ namespace ClassDiagramBuilder
             projectAnalyzer.FoldersToIgnore = new List<string>() { @".git", @".vs", @"bin", @"obj" };
 
             var filesTree = projectAnalyzer.BuildTree(@"C:\Users\Alex Raj\source\repos\ClassDiagramBuilder");
-            
-            var syntaxTree = projectAnalyzer.AnalyzeFile(filesTree.Nodes[0].Data[0]);
-            PrintTree(syntaxTree, 0);
+
+            var syntaxTree = projectAnalyzer.AnalyzeFile(filesTree.Children[0].Data[0]);
+            PrintTree(syntaxTree);
             Console.ReadKey();
         }
 
@@ -25,14 +23,14 @@ namespace ClassDiagramBuilder
             return GetRoot(Directory.GetParent(path).ToString(), level - 1);
         }
 
-        static void PrintTree<T>(Node<T> tree, int level)
-        {
-            Console.WriteLine(tree);
-            if (tree.Nodes?.Count > 0)
+        static void PrintTree<T>(Node<T> node)
+        { 
+            Console.WriteLine(node);
+            if (node.Children?.Count > 0)
             {
-                foreach (var child in tree.Nodes)
+                foreach (var child in node.Children)
                 {
-                    PrintTree(child, level);
+                    PrintTree(child);
                 }
             }
         }

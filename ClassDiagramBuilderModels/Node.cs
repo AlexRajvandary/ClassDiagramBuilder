@@ -11,24 +11,24 @@
             Data = data;
         }
 
-        internal Node(Node<T> parent, List<Node<T>> nodes)
+        internal Node(Node<T> parent, List<Node<T>> children)
         {
             Parent = parent;
-            Nodes = nodes;
+            Children = children;
         }
 
-        internal Node(Node<T> parent, List<Node<T>> nodes, T data)
+        internal Node(Node<T> parent, List<Node<T>> children, T data)
         {
             Parent = parent;
-            Nodes = nodes;
+            Children = children;
             Data = data;
         }
+
+        public List<Node<T>> Children { get; private set; }
 
         public T Data { get; internal set; }
 
         public string Name { get; internal set; }
-
-        public List<Node<T>> Nodes { get; private set; }
 
         public Node<T> Parent
         {
@@ -45,10 +45,10 @@
 
         public void AddChild(Node<T> node)
         {
-            Nodes ??= new List<Node<T>>();
-            if (!Nodes.Contains(node))
+            Children ??= new List<Node<T>>();
+            if (!Children.Contains(node))
             {
-                Nodes.Add(node);
+                Children.Add(node);
 
                 if(node.Parent == null)
                 {
@@ -61,7 +61,7 @@
 
         public void RemoveNode(Node<T> node)
         {
-            Nodes?.Remove(node);
+            Children?.Remove(node);
         }
     }
 }

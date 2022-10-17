@@ -1,8 +1,4 @@
-﻿using ClassDiagramBuilder.Models.TypeAnalyzerModels;
-using System;
-using System.Diagnostics;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using System.Diagnostics;
 
 namespace ClassDiagramBuilder.Models.Parser
 {
@@ -16,11 +12,9 @@ namespace ClassDiagramBuilder.Models.Parser
                 data = sr.ReadToEnd();
             }
 
-            //data = Regex.Replace(data, @"\s+", " ");
-            //data = data.Replace(Environment.NewLine, string.Empty);
             if (IsBracketsBalanced(data))
             {
-                var tree = TreeFromString(data);
+                var tree = TreeFromString("1{2{}2{3{}3{4{5{}}4{}}3{}3{}}2{}}");
                 return tree;
             }
             else
@@ -76,7 +70,16 @@ namespace ClassDiagramBuilder.Models.Parser
                     }
                     else
                     {
-                        currentNode = currentNode.Parent;
+                        if (i + 1 < str.Length)
+                        {
+                            currentNode = currentNode.Parent.Parent;
+                            if(str[i + 1] != '}')
+                            {
+                                var newChild = new Node<string>();
+                                currentNode.AddChild(newChild);
+                                currentNode = newChild;
+                            }
+                        }
                     }
                 }
                 else
@@ -87,28 +90,5 @@ namespace ClassDiagramBuilder.Models.Parser
 
             return root;
         }
-    }
-
-    public class Token
-    {
-        public Token()
-        {
-
-        }
-
-        public Token(string value)
-        {
-            Value = value;
-        }
-
-        public Token(string name, string value)
-        {
-            Header = name;
-            Value = value;
-        }
-
-        public string Header { get; set; }
-
-        public string Value { get; set; }
     }
 }
