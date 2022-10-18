@@ -4,7 +4,7 @@ namespace ClassDiagramBuilder.Models.Parser
 {
     public class TypeParser
     {
-        public Node<string>? Parse(string path)
+        public Node<string>? GetFileMemberHirarchy(string path)
         {
             string data;
             using (var sr = new StreamReader(path))
@@ -22,6 +22,18 @@ namespace ClassDiagramBuilder.Models.Parser
                 Trace.WriteLine($"Invalid data: {path}");
                 return null;
             }
+        }
+
+        public Node<List<Token>>? GetTokensTree(Node<string> dataTree)
+        {
+            var tokensTree = new Node<List<Token>>();
+            return tokensTree;
+        }
+
+        public Token? Tokenize(string data)
+        {
+            var token = new Token();
+
         }
 
         private bool IsBracketsBalanced(string str)

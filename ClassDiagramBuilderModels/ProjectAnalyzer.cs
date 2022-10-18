@@ -48,7 +48,7 @@ namespace ClassDiagramBuilder.Models
         public Node<string> AnalyzeFile(string path)
         {
             var typeParser = new TypeParser();
-            var syntaxTree = typeParser.Parse(path);
+            var syntaxTree = typeParser.GetFileMemberHirarchy(path);
             return syntaxTree;
         }
     }
