@@ -11,10 +11,10 @@ namespace ClassDiagramBuilder.Models.Parser
             {
                 data = sr.ReadToEnd();
             }
-
+            data = data.Replace("\r\n", string.Empty);
             if (IsBracketsBalanced(data))
             {
-                var tree = TreeFromString("1{2{}2{3{}3{4{5{}}4{}}3{}3{}}2{}}");
+                var tree = TreeFromString(data);
                 return tree;
             }
             else
