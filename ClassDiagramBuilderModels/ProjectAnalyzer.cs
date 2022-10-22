@@ -1,6 +1,4 @@
-﻿using System.CodeDom.Compiler;
-using System.Reflection;
-using ClassDiagramBuilder.Models.Parser;
+﻿using ClassDiagramBuilder.Models.Parser;
 
 namespace ClassDiagramBuilder.Models
 {

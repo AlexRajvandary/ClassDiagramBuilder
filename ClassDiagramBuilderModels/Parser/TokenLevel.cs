@@ -2,8 +2,9 @@
 {
     public enum TokenLevel
     {
-        NamespaceChild,
-        TypeChild,
-        TypeMemberChild
+        Using,
+        NamespaceDeclaration,
+        TypeDeclaration,
+        TypeMember
     }
 }

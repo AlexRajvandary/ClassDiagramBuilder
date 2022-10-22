@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using ClassDiagramBuilder.Models.TypeAnalyzerModels;
 
 namespace ClassDiagramBuilder.Models.Parser
 {
@@ -14,8 +15,8 @@ namespace ClassDiagramBuilder.Models.Parser
             data = data.Replace("\r\n", string.Empty);
             if (IsBracketsBalanced(data))
             {
-                var tree = TreeFromString(data);
-                return tree;
+                var fileMemberHirarchy = GetFileMembersTree(data);
+                return fileMemberHirarchy;
             }
             else
             {
@@ -24,17 +25,48 @@ namespace ClassDiagramBuilder.Models.Parser
             }
         }
 
-        public Node<List<Token>>? GetTokensTree(Node<string> dataTree)
+        public List<TypeInfo> GetTypesInfo(Node<List<MemberParser>> fileMembersTree)
         {
-            var tokensTree = new Node<List<Token>>();
-            return tokensTree;
+            var typeInfos = new List<TypeInfo>();
+            //if (fileMembersTree.Data.Last().Level == TokenLevel.Root)
+            //{
+            //    foreach (var fileMember in fileMembersTree.Children)
+            //    {
+            //        foreach (var typeDataItem in fileMember.Data)
+            //        {
+            //            //if (typeDataItem.Level != TokenLevel.Namespace) return null;
+
+            //            //var typekind = typeDataItem.TokenType switch
+            //            //{
+            //            //    TokenType.Struct => TypeKind.Struct,
+            //            //    TokenType.Class => TypeKind.Class,
+            //            //    TokenType.Enum => TypeKind.Enum,
+            //            //    _ => TypeKind.Undefined
+            //            //};
+
+            //            //var accsessModifier = typeDataItem.AcsessModifier;
+            //            //var ctors = typeDataItem.GetCtors();
+            //            //var methods = typeDataItem.GetMethods();
+            //            //var properies = typeDataItem.GetProperties();
+            //            //var fields = typeDataItem.GetFields();
+            //            //var name = typeDataItem.Header;
+
+            //            //typeInfos.Add(new TypeInfo(accsessModifier,
+            //            //                           ctors,
+            //            //                           fields,
+            //            //                           false,
+            //            //                           methods,
+            //            //                           name,
+            //            //                           "namespace",
+            //            //                           properies,
+            //            //                           typekind));
+            //        }
+            //    }
+            //}
+
+            return typeInfos;
         }
 
-        public Token? Tokenize(string data)
-        {
-            var token = new Token();
-
-        }
 
         private bool IsBracketsBalanced(string str)
         {
@@ -58,7 +90,7 @@ namespace ClassDiagramBuilder.Models.Parser
             return stack.Count == 0;
         }
 
-        private Node<string> TreeFromString(string str)
+        private Node<string> GetFileMembersTree(string str)
         {
             var openBracketsIndexStack = new Stack<int>();
             var root = new Node<string>();
@@ -85,7 +117,7 @@ namespace ClassDiagramBuilder.Models.Parser
                         if (i + 1 < str.Length)
                         {
                             currentNode = currentNode.Parent.Parent;
-                            if(str[i + 1] != '}')
+                            if (str[i + 1] != '}')
                             {
                                 var newChild = new Node<string>();
                                 currentNode.AddChild(newChild);
