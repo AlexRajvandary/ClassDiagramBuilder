@@ -1,42 +1,39 @@
 ﻿namespace ClassDiagramBuilder.Models.TypeAnalyzerModels
 {
-    public class TypeInfo
+    public class TypeInfo : MemberInfo
     {
         public TypeInfo(AcsessModifiers acsessModifier,
+                        bool isStatic,
                         TypeKind typeKind,
                         string name,
-                        string nameSpace) : this(acsessModifier, null, typeKind, null, name, nameSpace, null) { }
+                        string nameSpace) : this(acsessModifier, null, null, isStatic, typeKind, null, name, nameSpace, null) { }
 
         public TypeInfo(AcsessModifiers acsessModifier,
+                        List<ConstructorInfo> constructors,
                         List<TypeInfo> fields,
+                        bool isStatic,
                         TypeKind typeKind,
                         List<MethodInfo> methods,
                         string name,
                         string nameSpace,
-                        List<TypeInfo> properties)
+                        List<TypeInfo> properties) : base(acsessModifier, isStatic, name, nameSpace)
         {
-            AcsessModifier = acsessModifier;
+            Constructors = constructors;
             Fields = fields;
             Kind = typeKind;
             Methods = methods;
-            Name = name;
-            Namespace = nameSpace;
             Properties = properties;
         }
 
-        public AcsessModifiers AcsessModifier { get; set; }
+        public List<ConstructorInfo>? Constructors { get; set; }
 
-        public List<TypeInfo> Fields { get; set; }
+        public List<TypeInfo>? Fields { get; set; }
 
         public TypeKind Kind { get; set; }
 
-        public List<MethodInfo> Methods { get; set; }
+        public List<MethodInfo>? Methods { get; set; }
 
-        public string Name { get; set; }
-
-        public string Namespace { get; set; }
-
-        public List<TypeInfo> Properties { get; set; }
+        public List<TypeInfo>? Properties { get; set; }
 
         public override string ToString() => $"{Namespace}.{Name}";
     }

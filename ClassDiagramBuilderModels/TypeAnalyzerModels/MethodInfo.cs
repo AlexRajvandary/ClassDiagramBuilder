@@ -1,13 +1,20 @@
 ﻿namespace ClassDiagramBuilder.Models.TypeAnalyzerModels
 {
-    public class MethodInfo
+    public class MethodInfo : MemberInfo
     {
-        public AcsessModifiers AcessModifiers { get; set; }
+        public MethodInfo(AcsessModifiers acsessModifier,
+                          bool isStatic,
+                          string name,
+                          string nameSpace,
+                          List<TypeInfo> parameters,
+                          TypeInfo returnType) : base(acsessModifier, isStatic, name, nameSpace)
+        {
+            Parameters = parameters;
+            ReturnType = returnType;
+        }
 
-        public string Name { get; set; }
+        public List<TypeInfo> Parameters { get; private set; }
 
-        public List<TypeInfo> Parameters { get; set; }
-
-        public TypeInfo ReturnType { get; set; }
+        public TypeInfo ReturnType { get; private set; }
     }
 }
