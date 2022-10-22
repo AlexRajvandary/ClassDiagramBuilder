@@ -2,7 +2,7 @@
 {
     public class MethodInfo
     {
-        public AcessModifiers AcessModifiers { get; set; }
+        public AcsessModifiers AcessModifiers { get; set; }
 
         public string Name { get; set; }
 

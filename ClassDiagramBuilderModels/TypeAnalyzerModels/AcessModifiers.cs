@@ -1,6 +1,6 @@
 ﻿namespace ClassDiagramBuilder.Models.TypeAnalyzerModels
 {
-    public enum AcessModifiers
+    public enum AcsessModifiers
     {
         Private,
         PrivateProtected,
