@@ -4,9 +4,9 @@
     {
         public FieldInfo(AcsessModifiers acsessModifier,
                          bool isAbstract,
+                         bool isConstant,
                          bool isStatic,
                          bool isReadOnly,
-                         bool isConstant,
                          string name,
                          string nameSpace,
                          TypeInfo type) : base(acsessModifier, isAbstract, isStatic, name, nameSpace)
