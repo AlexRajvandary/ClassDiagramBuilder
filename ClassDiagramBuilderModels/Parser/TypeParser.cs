@@ -18,7 +18,7 @@ namespace ClassDiagramBuilder.Models.Parser
             data = Regex.Replace(data, @"\s+", " ");
             if (IsBracketsBalanced(data))
             {
-                var fileMemberHirarchy = GetFileMembersTree(path, data);
+                var fileMemberHirarchy = GetFileMembersTree(Path.GetFileName(path), data);
                 return fileMemberHirarchy;
             }
             else
@@ -27,49 +27,6 @@ namespace ClassDiagramBuilder.Models.Parser
                 return null;
             }
         }
-
-        public List<TypeInfo> GetTypesInfo(Node<List<MemberParser>> fileMembersTree)
-        {
-            var typeInfos = new List<TypeInfo>();
-            //if (fileMembersTree.Data.Last().Level == TokenLevel.Root)
-            //{
-            //    foreach (var fileMember in fileMembersTree.Children)
-            //    {
-            //        foreach (var typeDataItem in fileMember.Data)
-            //        {
-            //            //if (typeDataItem.Level != TokenLevel.Namespace) return null;
-
-            //            //var typekind = typeDataItem.TokenType switch
-            //            //{
-            //            //    TokenType.Struct => TypeKind.Struct,
-            //            //    TokenType.Class => TypeKind.Class,
-            //            //    TokenType.Enum => TypeKind.Enum,
-            //            //    _ => TypeKind.Undefined
-            //            //};
-
-            //            //var accsessModifier = typeDataItem.AcsessModifier;
-            //            //var ctors = typeDataItem.GetCtors();
-            //            //var methods = typeDataItem.GetMethods();
-            //            //var properies = typeDataItem.GetProperties();
-            //            //var fields = typeDataItem.GetFields();
-            //            //var name = typeDataItem.Header;
-
-            //            //typeInfos.Add(new TypeInfo(accsessModifier,
-            //            //                           ctors,
-            //            //                           fields,
-            //            //                           false,
-            //            //                           methods,
-            //            //                           name,
-            //            //                           "namespace",
-            //            //                           properies,
-            //            //                           typekind));
-            //        }
-            //    }
-            //}
-
-            return typeInfos;
-        }
-
 
         private bool IsBracketsBalanced(string str)
         {

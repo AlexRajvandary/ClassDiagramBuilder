@@ -5,7 +5,7 @@
         public ConstructorInfo(AcsessModifiers acsessModifier,
                                bool isStatic,
                                string nameSpace,
-                               List<TypeInfo> parameters) : base(acsessModifier, isStatic, null, nameSpace)
+                               List<TypeInfo> parameters) : base(acsessModifier, false, isStatic, null, nameSpace)
         {
             Parameters = parameters;
         }

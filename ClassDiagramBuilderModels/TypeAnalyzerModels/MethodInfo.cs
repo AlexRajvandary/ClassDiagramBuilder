@@ -3,11 +3,12 @@
     public class MethodInfo : MemberInfo
     {
         public MethodInfo(AcsessModifiers acsessModifier,
+                          bool isAbstract,
                           bool isStatic,
                           string name,
                           string nameSpace,
                           List<TypeInfo> parameters,
-                          TypeInfo returnType) : base(acsessModifier, isStatic, name, nameSpace)
+                          TypeInfo returnType) : base(acsessModifier, isAbstract, isStatic, name, nameSpace)
         {
             Parameters = parameters;
             ReturnType = returnType;
