@@ -28,7 +28,11 @@
 
         public T Data { get; internal set; }
 
-        public string Name { get; internal set; }
+        public string Header { get; internal set; }
+
+        public bool HeaderReadOnly => Children != null && Children.Count != 0;
+
+        public int Level => Parent?.Level + 1 ?? 1;
 
         public Node<T> Parent
         {
@@ -43,24 +47,25 @@
             }
         }
 
-        public void AddChild(Node<T> node)
+        public void AddChild(Node<T> child)
         {
             Children ??= new List<Node<T>>();
-            if (!Children.Contains(node))
+            if (!Children.Contains(child))
             {
-                Children.Add(node);
+                Children.Add(child);
 
-                if(node.Parent == null)
+                if(child.Parent == null)
                 {
-                    node.Parent = this;
+                    child.Parent = this;
                 }
             }
         }
 
-        public override string ToString() => $"{Data}";
+        public override string ToString() => $"{Header}";
 
-        public void RemoveNode(Node<T> node)
+        public void RemoveChild(Node<T> node)
         {
+            node.Parent = null;
             Children?.Remove(node);
         }
     }

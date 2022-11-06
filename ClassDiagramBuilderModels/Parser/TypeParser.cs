@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.Text.RegularExpressions;
 using ClassDiagramBuilder.Models.TypeAnalyzerModels;
 
 namespace ClassDiagramBuilder.Models.Parser
@@ -12,10 +14,11 @@ namespace ClassDiagramBuilder.Models.Parser
             {
                 data = sr.ReadToEnd();
             }
-            data = data.Replace("\r\n", string.Empty);
+
+            data = Regex.Replace(data, @"\s+", " ");
             if (IsBracketsBalanced(data))
             {
-                var fileMemberHirarchy = GetFileMembersTree(data);
+                var fileMemberHirarchy = GetFileMembersTree(path, data);
                 return fileMemberHirarchy;
             }
             else
@@ -90,45 +93,69 @@ namespace ClassDiagramBuilder.Models.Parser
             return stack.Count == 0;
         }
 
-        private Node<string> GetFileMembersTree(string str)
+        private Node<string> GetFileMembersTree(string filename, string fileRawContent)
         {
             var openBracketsIndexStack = new Stack<int>();
             var root = new Node<string>();
+            root.Header = filename;
+            var newChildNode = new Node<string>();
+            root.AddChild(newChildNode);
+            var currentNode = newChildNode;
 
-            var currentNode = root;
-
-            for (var i = 0; i < str.Length; i++)
+            for (var charIndex = 0; charIndex < fileRawContent.Length; charIndex++)
             {
-                if (str[i] == '{')
+                var previousChar = charIndex - 1 > 0 ? fileRawContent[charIndex - 1] : char.MinValue;
+                var currentChar = fileRawContent[charIndex];
+                var nextChar = charIndex + 1 < fileRawContent.Length ? fileRawContent[charIndex + 1] : char.MinValue;
+
+                if (currentChar == '{')
                 {
-                    openBracketsIndexStack.Push(i);
+                    openBracketsIndexStack.Push(charIndex);
+
                     var childNode = new Node<string>();
                     currentNode.AddChild(childNode);
                     currentNode = childNode;
                 }
-                else if (str[i] == '}')
+                else if (currentChar == '}')
                 {
                     if (!openBracketsIndexStack.TryPop(out var _))
                     {
-                        Trace.WriteLine($"To many closed brackets: {i}");
+                        Trace.WriteLine($"To many closed brackets: {charIndex}");
+                        return null;
                     }
                     else
                     {
-                        if (i + 1 < str.Length)
+                        var parent = currentNode.Parent;
+                        if (string.IsNullOrEmpty(currentNode.Header))
                         {
-                            currentNode = currentNode.Parent.Parent;
-                            if (str[i + 1] != '}')
-                            {
-                                var newChild = new Node<string>();
-                                currentNode.AddChild(newChild);
-                                currentNode = newChild;
-                            }
+                            parent.RemoveChild(currentNode);
                         }
+
+                        currentNode = parent;
+                    }
+                }
+                else if (currentChar == ';')
+                {
+                    if (currentNode.Parent != null)
+                    {
+                        currentNode = currentNode.Parent;
                     }
                 }
                 else
                 {
-                    currentNode.Data += str[i];
+                    if (previousChar == ';' && nextChar != '}' || previousChar == '}')
+                    {
+                        var child = new Node<string>();
+                        currentNode.AddChild(child);
+                        currentNode = child;
+                    }
+                    else
+                    {
+                        if (!currentNode.HeaderReadOnly)
+                        {
+                            currentNode.Header += fileRawContent[charIndex];
+                        }
+                    }
                 }
             }
 

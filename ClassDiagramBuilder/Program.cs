@@ -24,8 +24,8 @@ namespace ClassDiagramBuilder
         }
 
         static void PrintTree<T>(Node<T> node)
-        { 
-            Console.WriteLine(node);
+        {
+            Console.WriteLine(new string('\t', node.Level) + node.Header);
             if (node.Children?.Count > 0)
             {
                 foreach (var child in node.Children)

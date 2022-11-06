@@ -15,7 +15,7 @@ namespace ClassDiagramBuilder.Models
         public Node<List<string>> BuildTree(string folder)
         {
             var tree = new Node<List<string>>();
-            tree.Name = new DirectoryInfo(folder).Name;
+            tree.Header = new DirectoryInfo(folder).Name;
             tree.Data = new List<string>();
 
             var dirs = FoldersToIgnore == null
