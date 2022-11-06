@@ -21,6 +21,5 @@
         public bool IsAuto { get; private set; }
 
         public AcsessModifiers SetterAcsessModifier { get; private set; }
-
     }
 }

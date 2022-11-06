@@ -3,13 +3,13 @@
     public class FieldInfo : MemberInfo
     {
         public FieldInfo(AcsessModifiers acsessModifier,
-                                          bool isAbstract,
-                                          bool isStatic,
-                                          bool isReadOnly,
-                                          bool isConstant,
-                                          string name,
-                                          string nameSpace,
-                                          TypeInfo type) : base(acsessModifier, isAbstract, isStatic, name, nameSpace)
+                         bool isAbstract,
+                         bool isStatic,
+                         bool isReadOnly,
+                         bool isConstant,
+                         string name,
+                         string nameSpace,
+                         TypeInfo type) : base(acsessModifier, isAbstract, isStatic, name, nameSpace)
         {
             IsConstant = isConstant;
             IsReadOnly = isReadOnly;
