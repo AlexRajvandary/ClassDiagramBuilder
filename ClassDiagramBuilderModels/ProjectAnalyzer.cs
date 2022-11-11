@@ -25,7 +25,6 @@ namespace ClassDiagramBuilder.Models
             foreach (var dir in dirs)
             {
                 var child = BuildTree(dir);
-                child.Parent = tree;
                 tree.AddChild(child);
             }
 

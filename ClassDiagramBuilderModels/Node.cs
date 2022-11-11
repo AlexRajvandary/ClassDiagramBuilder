@@ -53,11 +53,7 @@
             if (!Children.Contains(child))
             {
                 Children.Add(child);
-
-                if(child.Parent == null)
-                {
-                    child.Parent = this;
-                }
+                child.Parent ??= this;
             }
         }
 

@@ -1,20 +1,20 @@
 ﻿namespace ClassDiagramBuilder
 {
-    public class Graph
+    public class Graph<T>
     {
-        public List<GraphVertex> Vertices { get; }
+        public List<GraphVertex<T>> Vertices { get; }
 
         public Graph()
         {
-            Vertices = new List<GraphVertex>();
+            Vertices = new List<GraphVertex<T>>();
         }
 
         public void AddVertex(string vertexName)
         {
-            Vertices.Add(new GraphVertex(vertexName));
+            Vertices.Add(new GraphVertex<T>(vertexName));
         }
 
-        public GraphVertex FindVertex(string vertexName)
+        public GraphVertex<T> FindVertex(string vertexName)
         {
             foreach (var v in Vertices)
             {
@@ -25,17 +25,6 @@
             }
 
             return null;
-        }
-
-        public void AddEdge(string firstName, string secondName, int weight)
-        {
-            var v1 = FindVertex(firstName);
-            var v2 = FindVertex(secondName);
-            if (v2 != null && v1 != null)
-            {
-                v1.AddEdge(v2, weight);
-                v2.AddEdge(v1, weight);
-            }
         }
     }
 }

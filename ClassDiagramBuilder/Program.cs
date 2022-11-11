@@ -4,18 +4,32 @@ namespace ClassDiagramBuilder
 {
     internal class Program
     {
+        private static Node<List<string>> filesTree;
+        private static ProjectAnalyzer projectAnalyzer;
+        private static readonly string outputFilePath = @"output.txt";
+
         static void Main(string[] args)
         {
-            var projectAnalyzer = new ProjectAnalyzer();
+            File.Create(outputFilePath);
+
+            projectAnalyzer = new ProjectAnalyzer();
             projectAnalyzer.FileExtensionsToAnalyze = new List<string>() { @".cs" };
             projectAnalyzer.FoldersToIgnore = new List<string>() { @".git", @".vs", @"bin", @"obj" };
 
-            var filesTree = projectAnalyzer.BuildTree(@"C:\Users\Alex Raj\source\repos\ClassDiagramBuilder");
+            filesTree = projectAnalyzer.BuildTree(@"C:\Users\Alex Raj\source\repos\ClassDiagramBuilder\ClassDiagramBuilderModels");
 
-            var syntaxTree = projectAnalyzer.AnalyzeFile(filesTree.Children[0].Data[0]);
-            PrintTree(syntaxTree);
+            PrintTreesData(filesTree, PrintFile);
+
             Console.ReadKey();
         }
+
+        private static void PrintFile(string path)
+        {
+            var syntaxTree = projectAnalyzer.AnalyzeFile(path);
+            PrintTree(syntaxTree, Print);
+        }
+
+        private static void Print(string stringToWrite) => Console.WriteLine(stringToWrite);
 
         static string GetRoot(string path, int level)
         {
@@ -23,14 +37,31 @@ namespace ClassDiagramBuilder
             return GetRoot(Directory.GetParent(path).ToString(), level - 1);
         }
 
-        static void PrintTree<T>(Node<T> node)
+        static void PrintTree<T>(Node<T> node, Action<string> printer)
         {
-            Console.WriteLine(new string('\t', node.Level) + node.Header);
-            if (node.Children?.Count > 0)
+            printer?.Invoke(node?.ToString());
+
+            if (node?.Children?.Count > 0)
             {
                 foreach (var child in node.Children)
                 {
-                    PrintTree(child);
+                    PrintTree(child, printer);
+                }
+            }
+        }
+
+        static void PrintTreesData(Node<List<string>> node, Action<string> printer)
+        {
+            foreach (var file in node.Data)
+            {
+                printer?.Invoke(file);
+            }
+
+            if (node?.Children?.Count > 0)
+            {
+                foreach (var child in node.Children)
+                {
+                    PrintTreesData(child, printer);
                 }
             }
         }

@@ -1,25 +1,20 @@
 ﻿namespace ClassDiagramBuilder
 {
-    public class GraphVertex
+    public class GraphVertex<T>
     {
         public string Name { get; }
 
-        public List<GraphEdge> Edges { get; }
+        public List<GraphEdge<T>> Edges { get; }
 
         public GraphVertex(string vertexName)
         {
             Name = vertexName;
-            Edges = new List<GraphEdge>();
+            Edges = new List<GraphEdge<T>>();
         }
 
-        public void AddEdge(GraphEdge newEdge)
+        public void AddEdge(GraphEdge<T> newEdge)
         {
             Edges.Add(newEdge);
-        }
-
-        public void AddEdge(GraphVertex vertex, int edgeWeight)
-        {
-            AddEdge(new GraphEdge(vertex, edgeWeight));
         }
 
         public override string ToString() => Name;
