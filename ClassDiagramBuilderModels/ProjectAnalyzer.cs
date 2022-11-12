@@ -46,6 +46,7 @@ namespace ClassDiagramBuilder.Models
         {
             var typeParser = new TypeParser();
             var syntaxTree = typeParser.GetFileMemberHirarchy(path);
+            typeParser.GetTypeInfos(syntaxTree);
             return syntaxTree;
         }
     }

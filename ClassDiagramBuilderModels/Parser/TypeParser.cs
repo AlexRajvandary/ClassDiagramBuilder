@@ -7,6 +7,15 @@ namespace ClassDiagramBuilder.Models.Parser
 {
     public class TypeParser
     {
+        private readonly Regex typeInfoHeaderPattern = new Regex(@"");
+        private readonly Regex fieldDeclarationPattern = new Regex(@"");
+        private readonly Regex propertyDeclarationPattern = new Regex(@"");
+        private readonly Regex methodDeclarationPattern = new Regex(@"");
+        private readonly Regex constructorDeclarationPattern = new Regex(@"");
+
+        private string currentNameSpace;
+        private string currentFilename;
+
         public Node<string>? GetFileMemberHirarchy(string path)
         {
             string data;
@@ -26,6 +35,39 @@ namespace ClassDiagramBuilder.Models.Parser
                 Trace.WriteLine($"Invalid data: {path}");
                 return null;
             }
+        }
+
+        public List<TypeInfo> GetTypeInfos(Node<string> FileMemberHirarchy)
+        {
+            ArgumentNullException.ThrowIfNull(FileMemberHirarchy);
+
+            var typeInfos = new List<TypeInfo>();
+            var filename = FileMemberHirarchy?.Header;
+            var nameSpace = FileMemberHirarchy?.Children?.FirstOrDefault()?.Header;
+
+            if (string.IsNullOrEmpty(filename))
+            {
+                throw new Exception($"{nameof(filename)} is null or empty!");
+            }
+
+            if (string.IsNullOrEmpty(nameSpace))
+            {
+                throw new Exception($"{nameof(nameSpace)} is null or empty!");
+            }
+
+            currentFilename = filename;
+            currentNameSpace = nameSpace;
+
+            foreach (var rawTypeInfo in FileMemberHirarchy.Children.FirstOrDefault().Children)
+            {
+                var typeInfo = GetTypeInfo(rawTypeInfo);
+                if(typeInfo != null)
+                {
+                    typeInfos.Add(typeInfo);
+                }
+            }
+
+            return typeInfos;
         }
 
         private bool IsBracketsBalanced(string str)
@@ -117,6 +159,22 @@ namespace ClassDiagramBuilder.Models.Parser
             }
 
             return root;
+        }
+
+        private TypeInfo GetTypeInfo(Node<string> rawTypeInfo)
+        {
+            if (string.IsNullOrEmpty(currentNameSpace))
+            {
+                throw new Exception($"{nameof(currentNameSpace)} is null or empty!");
+            }
+
+            foreach(var memberInfo in rawTypeInfo.Children)
+            {
+
+            }
+
+            TypeInfo typeInfo = null;
+            return typeInfo;
         }
     }
 }
