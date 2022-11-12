@@ -10,6 +10,7 @@
         Height="600"
         Width="800"
         ResizeMode="CanResize"
+        WindowStyle="SingleBorderWindow"
         WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
@@ -68,9 +69,7 @@
                             <fa:ImageAwesome Icon="Bars" Foreground="White" Height="25" VerticalAlignment="Top" Width="25"/>
 
                         </Border>
-
-                       
-
+                        
                     </ControlTemplate>
 
                 </Setter.Value>
@@ -84,19 +83,18 @@
 
         <!--// Background Color //-->
 
-        <Grid Background="LightGray">
+        <Grid Background="GhostWhite">
 
             <!--// Background Image //-->
 
             <Grid x:Name="BG" PreviewMouseLeftButtonDown="BG_PreviewMouseLeftButtonDown">
 
-                <!--<Grid.Background>
-
-                    <ImageBrush x:Name="img_bg"
-                                ImageSource="Assets/img_background.png"
-                                Stretch="Fill"/>
-
-                </Grid.Background>-->
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="10"/>
+                    </Grid.RowDefinitions>
+                </Grid>
 
             </Grid>
 
@@ -104,7 +102,7 @@
 
             <Grid   x:Name="nav_pnl"
                     HorizontalAlignment="Left"
-                    Width="65"
+                    Width="55"
                     Background="#2E333A">
 
                 <StackPanel x:Name="st_pnl">
@@ -115,37 +113,13 @@
 
                         <!--// Menu title text //-->
 
-                        <TextBlock  Grid.Row="1"
-                                    Grid.Column="0"
-                                    Margin="73,-20,0,0"
-                                    Text="M E N U"
-                                    Foreground="White"
-                                    FontSize="22"
-                                    Background="Transparent"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Center"
-                                    Style="{StaticResource font_style}">
-                            
-                            <!--// Shadow Effect //-->
-
-                            <TextBlock.Effect>
-
-                                <DropShadowEffect  BlurRadius="10"
-                                                   ShadowDepth="1"
-                                                   Direction="-90"
-                                                   Color="White"/>
-
-                            </TextBlock.Effect>
-
-                        </TextBlock>
-
                         <!--// Toggle Button //-->
 
                         <ToggleButton x:Name="Tg_Btn"
                                       Grid.Column="0"
                                       VerticalAlignment="Center"
                                       HorizontalAlignment="Left"
-                                      Margin="18,-20,0,0"
+                                      Margin="13,-20,0,0"
                                       Height="30"
                                       Width="30"
                                       BorderThickness="0"
@@ -166,7 +140,7 @@
                                                 Storyboard.TargetName="nav_pnl"
                                                 Storyboard.TargetProperty="Width"
                                                 BeginTime="0:0:0"
-                                                From="230" To="65"
+                                                From="300" To="55"
                                                 Duration="0:0:0.2">
 
                                             </DoubleAnimation>
@@ -188,7 +162,7 @@
                                                 Storyboard.TargetName="nav_pnl"
                                                 Storyboard.TargetProperty="Width"
                                                 BeginTime="0:0:0"
-                                                From="65" To="230"
+                                                From="55" To="300"
                                                 Duration="0:0:0.3">
 
                                             </DoubleAnimation>
@@ -219,16 +193,27 @@
                         <!--// Home //-->
 
                         <ListViewItem HorizontalAlignment="Left"
-                                      Margin="0,0,0,15" MouseEnter="ListViewItem_MouseEnter"
+                                      MouseEnter="ListViewItem_MouseEnter"
                                       >
 
                             <StackPanel Orientation="Horizontal"
-                                        Width="230">
+                                        Width="300">
 
-                                <TextBlock Text="Home"
-                                           Margin="25,0,0,0"
-                                           Style="{StaticResource font_style}"/>
-
+                                <Button Background="Transparent"
+                                        Foreground="AliceBlue"
+                                        BorderBrush="Transparent"
+                                        FontSize="30"
+                                        Margin="5,0,0,0">
+                                    <Button.Content>
+                                        <fa:FontAwesome Icon="Home"/>
+                                    </Button.Content>
+                                </Button>
+                                <TextBlock 
+                                    Text="HOME"
+                                    Margin="20, -2.5,0,0"
+                                    FontSize="20"
+                                    Foreground="AliceBlue"
+                                    FontWeight="Regular"/>
                             </StackPanel>
 
                             <!--// Tooltip //-->
@@ -243,23 +228,32 @@
 
                         </ListViewItem>
 
-                        <!--// Contacts //-->
+
 
                         <ListViewItem HorizontalAlignment="Left"
-                                      Margin="0,0,0,15" MouseEnter="ListViewItem_MouseEnter"
+                                      Margin="0,0,0,0" MouseEnter="ListViewItem_MouseEnter"
                                       >
-                            
-                            <StackPanel Orientation="Horizontal"
-                                        Width="230">
-                                <Button Margin="15,0,0,0" Width="20">
-                                    <Button.Content>
-                                        <fa:FontAwesome Icon="ExclamationCircle" FontSize="12"/>
-                                    </Button.Content>
-                                </Button>
-                                <TextBlock Text="Contacts"
-                                           Margin="25,0,0,0"
-                                           Style="{StaticResource font_style}"/>
 
+                            <StackPanel Orientation="Horizontal"
+                                        Width="300">
+                                <Button Margin="10,0,0,0"
+                                        Width="25"
+                                        Height="25"
+                                        Background="Transparent"
+                                        BorderBrush="Transparent"
+                                        Foreground="AliceBlue"
+                                        >
+                                    <Button.Content>
+                                        <fa:FontAwesome Icon="SearchPlus" FontSize="20"/>
+                                    </Button.Content>
+
+                                </Button>
+                                <TextBlock 
+                                    Text="Set directory"
+                                    Margin="20, -2.5 ,0,0"
+                                    FontSize="20"
+                                    Foreground="AliceBlue"
+                                    FontWeight="Regular" FontFamily="Corbel"/>
                             </StackPanel>
 
                             <!--// Tooltip //-->
@@ -281,12 +275,18 @@
                                       >
 
                             <StackPanel Orientation="Horizontal"
-                                        Width="230">
+                                        Width="300">
 
-                                <TextBlock Text="Messages"
-                                           Margin="25,0,0,0"
-                                           Style="{StaticResource font_style}"/>
-
+                                <Button Background="Transparent"
+                                        Foreground="AliceBlue"
+                                        BorderBrush="Transparent"
+                                        FontSize="30"
+                                        Margin="8, 0,0,0">
+                                    <Button.Content>
+                                        <fa:FontAwesome Icon="Edit"/>
+                                    </Button.Content>
+                                </Button>
+                                <TextBlock Text="settings" FontSize="20" Foreground="AliceBlue" Margin="20,2.5,0,0" FontWeight="Regular" FontFamily="Corbel"/>
                             </StackPanel>
 
                             <!--// Tooltip //-->
@@ -298,92 +298,8 @@
                                          Style="{StaticResource tt_style}"/>
 
                             </ListViewItem.ToolTip>
-
                         </ListViewItem>
-
-                        <!--// Maps //-->
-
-                        <ListViewItem HorizontalAlignment="Left"
-                                      Margin="0,0,0,15" MouseEnter="ListViewItem_MouseEnter"
-                                      >
-
-                            <StackPanel Orientation="Horizontal"
-                                        Width="230">
-
-                                <TextBlock Text="Maps"
-                                           Margin="25,0,0,0"
-                                           Style="{StaticResource font_style}"/>
-
-                            </StackPanel>
-
-                            <!--// Tooltip //-->
-
-                            <ListViewItem.ToolTip>
-
-                                <ToolTip x:Name="tt_maps"
-                                         Content="Maps"
-                                         Style="{StaticResource tt_style}"/>
-
-                            </ListViewItem.ToolTip>
-
-                        </ListViewItem>
-
-                        <!--// Settings //-->
-
-                        <ListViewItem HorizontalAlignment="Left"
-                                      Margin="0,0,0,15" MouseEnter="ListViewItem_MouseEnter"
-                                      >
-
-                            <StackPanel Orientation="Horizontal"
-                                        Width="230">
-
-                                <TextBlock Text="Settings"
-                                           Margin="25,0,0,0"
-                                           Style="{StaticResource font_style}"/>
-
-                            </StackPanel>
-
-                            <!--// Tooltip //-->
-
-                            <ListViewItem.ToolTip>
-
-                                <ToolTip x:Name="tt_settings"
-                                         Content="Settings"
-                                         Style="{StaticResource tt_style}"/>
-
-                            </ListViewItem.ToolTip>
-
-                        </ListViewItem>
-
-                        <!--// Sign Out //-->
-
-                        <ListViewItem HorizontalAlignment="Left"
-                                      Margin="0,0,0,15" MouseEnter="ListViewItem_MouseEnter"
-                                      >
-
-                            <StackPanel Orientation="Horizontal"
-                                        Width="230">
-
-                                <TextBlock Text="Sign Out"
-                                           Margin="25,0,0,0"
-                                           Style="{StaticResource font_style}"/>
-
-                            </StackPanel>
-
-                            <!--// Tooltip //-->
-
-                            <ListViewItem.ToolTip>
-
-                                <ToolTip x:Name="tt_signout"
-                                         Content="Sign Out"
-                                         Style="{StaticResource tt_style}"/>
-
-                            </ListViewItem.ToolTip>
-
-                        </ListViewItem>
-
                         <!--// Listview items style template //-->
-
                         <ListView.ItemContainerStyle>
 
                             <Style TargetType="ListViewItem">
@@ -439,14 +355,14 @@
                             </Style>
 
                         </ListView.ItemContainerStyle>
-
                     </ListView>
-
                 </StackPanel>
-
-
             </Grid>
-
+            <Grid>
+                <Canvas Margin="60,0,0,0">
+                    
+                </Canvas>
+            </Grid>
         </Grid>
 
     </Grid>
