@@ -38,19 +38,19 @@
 
         public TypeInfo BaseClass { get; private set; }
 
-        public List<TypeInfo> BaseInterfaces { get; private set; }
+        public List<TypeInfo> BaseInterfaces { get; private set; } = new List<TypeInfo>();
 
-        public List<ConstructorInfo>? Constructors { get; private set; }
+        public List<ConstructorInfo> Constructors { get; private set; } = new List<ConstructorInfo>();
 
         public bool Created { get; private set; }
 
-        public List<FieldInfo>? Fields { get; private set; }
+        public List<FieldInfo> Fields { get; private set; } = new List<FieldInfo>();
 
         public TypeKind Kind { get; private set; }
 
-        public List<MethodInfo>? Methods { get; private set; }
+        public List<MethodInfo> Methods { get; private set; } = new List<MethodInfo>();
 
-        public List<PropertyInfo>? Properties { get; private set; }
+        public List<PropertyInfo> Properties { get; private set; } = new List<PropertyInfo>();
 
         public override string ToString() => $"{Namespace}.{Name}";
     }

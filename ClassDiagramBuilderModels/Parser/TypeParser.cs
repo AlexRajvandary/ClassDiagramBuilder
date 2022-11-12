@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using ClassDiagramBuilder.Models.TypeAnalyzerModels;
 
@@ -7,8 +8,8 @@ namespace ClassDiagramBuilder.Models.Parser
 {
     public class TypeParser
     {
-        private readonly Regex typeInfoHeaderPattern = new Regex(@"");
-        private readonly Regex fieldDeclarationPattern = new Regex(@"");
+        private readonly Regex typeInfoHeaderPattern = new Regex(@"^(?<AccsessModifier>public|private|internal|protected|protected\sinternal)?\s?(?<IsAbstract>abstract)?\s?(?<IsSealed>sealed)?\s?(?<IsStatic>static)?\s?(?<TypeKind>class|struct|interface)+\s(?<Name>[A-Za-z]+)\s?");
+        private readonly Regex fieldDeclarationPattern = new Regex(@"^(?<AccsessModifier>public|private|internal|protected|protected\sinternal)?\s?(?<IsStatic>static)?\s?(?<IsReadOnly>readonly)?\s?(?<TypeName>[A-Za-z]+)*\s*(?<Name>[A-Za-z]+)*\s?=?(?<Value>[.]+)?");
         private readonly Regex propertyDeclarationPattern = new Regex(@"");
         private readonly Regex methodDeclarationPattern = new Regex(@"");
         private readonly Regex constructorDeclarationPattern = new Regex(@"");
@@ -58,12 +59,15 @@ namespace ClassDiagramBuilder.Models.Parser
             currentFilename = filename;
             currentNameSpace = nameSpace;
 
-            foreach (var rawTypeInfo in FileMemberHirarchy.Children.FirstOrDefault().Children)
+            if (FileMemberHirarchy.Children.LastOrDefault().Children.Any())
             {
-                var typeInfo = GetTypeInfo(rawTypeInfo);
-                if(typeInfo != null)
+                foreach (var rawTypeInfo in FileMemberHirarchy.Children.LastOrDefault().Children)
                 {
-                    typeInfos.Add(typeInfo);
+                    var typeInfo = GetTypeInfo(rawTypeInfo);
+                    if (typeInfo != null)
+                    {
+                        typeInfos.Add(typeInfo);
+                    }
                 }
             }
 
@@ -168,12 +172,77 @@ namespace ClassDiagramBuilder.Models.Parser
                 throw new Exception($"{nameof(currentNameSpace)} is null or empty!");
             }
 
-            foreach(var memberInfo in rawTypeInfo.Children)
-            {
+            var data = rawTypeInfo?.Header?.Trim();
 
+            if (string.IsNullOrWhiteSpace(data) || !typeInfoHeaderPattern.IsMatch(data))
+            {
+                throw new Exception($"{data} is invalid.");
             }
 
-            TypeInfo typeInfo = null;
+            var typeInfoHeader = typeInfoHeaderPattern.Match(data);
+
+            var acsessModifier = typeInfoHeader.Groups["AccsessModifier"].Success
+                ? Enum.Parse<AcsessModifiers>(typeInfoHeader.Groups["AccsessModifier"].Value, ignoreCase: true)
+                : AcsessModifiers.Private;
+
+            var typeKind = Enum.Parse<TypeKind>(typeInfoHeader.Groups["TypeKind"].Value, ignoreCase: true);
+            var name = typeInfoHeader.Groups["name"].Value;
+            var isAbstract = typeInfoHeader.Groups["IsAbstract"].Success;
+            var isSealed = typeInfoHeader.Groups["IsSealed"].Success;
+            var isStatic = typeInfoHeader.Groups["IsStatic"].Success;
+
+            var fields = new List<FieldInfo>();
+
+            if (rawTypeInfo.Children != null)
+            {
+                foreach (var memberInfo in rawTypeInfo.Children)
+                {
+                    data = memberInfo?.Header?.Trim();
+                    
+                    if (string.IsNullOrWhiteSpace(data))
+                    {
+                        continue;
+                    }
+
+                    if (fieldDeclarationPattern.IsMatch(data))
+                    {
+                        var fieldHeader = fieldDeclarationPattern.Match(data);
+
+                        acsessModifier = fieldHeader.Groups["AccsessModifier"].Success
+                            ? Enum.Parse<AcsessModifiers>(fieldHeader.Groups["AccsessModifier"].Value, ignoreCase: true)
+                            : AcsessModifiers.Private;
+
+                        name = fieldHeader.Groups["Name"].Value;
+                        var typeName = fieldHeader.Groups["TypeName"].Value;
+                        isAbstract = fieldHeader.Groups["IsAbstract"].Success;
+                        isStatic = fieldHeader.Groups["IsStatic"].Success;
+                        var isReadOnly = fieldHeader.Groups["IsReadOnly"].Success;
+                        var isConstant = fieldHeader.Groups["IsConstant"].Success;
+                        var value = fieldHeader.Groups["Value"].Value;
+
+                        fields.Add(new FieldInfo(acsessModifier, isAbstract, isConstant, isStatic, isReadOnly, name, currentNameSpace, typeName));
+                    }
+                    else if (propertyDeclarationPattern.IsMatch(data))
+                    {
+
+                    }
+                    else if (methodDeclarationPattern.IsMatch(data))
+                    {
+
+                    }
+                    else if (constructorDeclarationPattern.IsMatch(data))
+                    {
+
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+            }
+
+            var typeInfo = new TypeInfo(acsessModifier, null, fields, isAbstract, isStatic, null, name, currentNameSpace, null, typeKind);
+
             return typeInfo;
         }
     }

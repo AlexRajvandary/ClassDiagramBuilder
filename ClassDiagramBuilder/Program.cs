@@ -16,7 +16,7 @@ namespace ClassDiagramBuilder
             projectAnalyzer.FileExtensionsToAnalyze = new List<string>() { @".cs" };
             projectAnalyzer.FoldersToIgnore = new List<string>() { @".git", @".vs", @"bin", @"obj" };
 
-            filesTree = projectAnalyzer.BuildTree(@"C:\Users\Alex Raj\source\repos\ClassDiagramBuilder\ClassDiagramBuilderModels");
+            filesTree = projectAnalyzer.BuildTree(@"C:\Users\Alex Raj\source\repos\ClassDiagramBuilder\ClassDiagramBuilder");
 
             PrintTreesData(filesTree, PrintFile);
 

@@ -9,17 +9,17 @@
                          bool isReadOnly,
                          string name,
                          string nameSpace,
-                         TypeInfo type) : base(acsessModifier, isAbstract, isStatic, name, nameSpace)
+                         string typeName) : base(acsessModifier, isAbstract, isStatic, name, nameSpace)
         {
             IsConstant = isConstant;
             IsReadOnly = isReadOnly;
-            Type = type;
+            TypeName = typeName;
         }
 
         public bool IsConstant { get; private set; }
 
         public bool IsReadOnly { get; private set; }
 
-        public TypeInfo Type { get; private set; }
+        public string TypeName { get; private set; }
     }
 }
