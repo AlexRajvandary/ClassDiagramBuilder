@@ -13,6 +13,13 @@ namespace ClassDiagramBuilder.Models
 
         public List<string> FoldersToIgnore { get; set; }
 
+        public List<TypeInfo> AnalyzeFile(string path)
+        {
+            var typeParser = new TypeParser();
+            var syntaxTree = typeParser.GetFileMemberHirarchy(path);
+            return typeParser.GetTypeInfos(syntaxTree);
+        }
+
         public Node<List<string>> BuildTree(string folder)
         {
             var tree = new Node<List<string>>();
@@ -41,13 +48,6 @@ namespace ClassDiagramBuilder.Models
             }
 
             return tree;
-        }
-
-        public List<TypeInfo> AnalyzeFile(string path)
-        {
-            var typeParser = new TypeParser();
-            var syntaxTree = typeParser.GetFileMemberHirarchy(path);
-            return typeParser.GetTypeInfos(syntaxTree);
         }
     }
 }

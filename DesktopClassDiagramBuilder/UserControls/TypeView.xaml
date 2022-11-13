@@ -7,11 +7,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="100">
     <Grid>
-        <Border 
-            BorderBrush="#FFCBCDCF"
-            BorderThickness="3"
+        <Border
+            BorderThickness="1"
             CornerRadius="6"
-            Panel.ZIndex="1">
+            >
             <Grid Background="#FFCBCDCF">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="20"/>

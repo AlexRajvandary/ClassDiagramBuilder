@@ -85,7 +85,7 @@
 
         <!--// Background Color //-->
 
-        <Grid Background="GhostWhite">
+        <Grid Background="#FFBFBFC9">
 
             <!--// Background Image //-->
 
