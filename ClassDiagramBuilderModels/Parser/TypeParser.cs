@@ -7,11 +7,11 @@ namespace ClassDiagramBuilder.Models.Parser
 {
     public class TypeParser
     {
-        private readonly Regex typeInfoHeaderPattern = new Regex(@"^(?<AccsessModifier>public|private|internal|protected|protected\sinternal)?\s?(?<IsAbstract>abstract)?\s?(?<IsSealed>sealed)?\s?(?<IsStatic>static)?\s?(?<TypeKind>class|struct|interface){1}\s?(?<TypeName>[A-Za-z]+)\s?(?<Generic><(?<GenericType>.+)>)?\s?(?<Name>\w+)");
-        private readonly Regex fieldDeclarationPattern = new Regex(@"^(?<AccsessModifier>public|private|internal|protected|protected\sinternal)?\s?(?<IsStatic>static)?\s?(?<IsReadOnly>readonly)?\s?(?<IsConstant>constant)?\s?(?<TypeName>\w+)?\s?(?<IsGeneric><(?<GenericType>.+)>)?\s(?<Name>\w+)(?<HasValue>\s?=(?<Value>.+))?");
-        private readonly Regex propertyDeclarationPattern = new Regex(@"^(?<AccsessModifier>public|private|internal|protected|protected\sinternal)?\s?(?<IsStatic>static)?\s?\s?(?<TypeName>\w+)?\s?(?<IsGeneric><(?<GenericType>.+)>)?\s(?<Name>\w+)");
-        private readonly Regex methodDeclarationPattern = new Regex(@"^(?<AccsessModifier>public|private|internal|protected|protected\sinternal)?\s?(?<IsStatic>static)?\s?(?<IsReadOnly>readonly)?\s?(?<IsConstant>constant)?\s?(?<ReturnTypeName>\w+)?\s?(?<IsGeneric><(?<GenericType>.+)>)?\s(?<Name>\w+)\s?(?<Params>\((?<Parameters>.)\))");
-        private readonly Regex constructorDeclarationPattern = new Regex(@"^(?<AccsessModifier>public|private|internal|protected|protected\sinternal)?\s?(?<IsStatic>static)?\s?(?<IsReadOnly>readonly)?\s?(?<IsConstant>constant)?\s?(?<ReturnTypeName>\w+)?\s?(?<IsGeneric><(?<GenericType>.+)>)\s?(?<Params>\((?<Parameters>.)\))");
+        private readonly Regex typeInfoHeaderPattern = new Regex(@"^(?<AccsessModifier>public|private|internal|protected|protected\sinternal)?\s?(?<IsAbstract>abstract)?\s?(?<IsSealed>sealed)?\s?(?<IsStatic>static)?\s?(?<TypeKind>class|struct|interface){1}\s?(?<TypeName>[A-Za-z]+)\s?(?<Generic><(?<GenericType>.+)>)?\s?(?<Name>\w+)\z");
+        private readonly Regex fieldDeclarationPattern = new Regex(@"^(?<AccsessModifier>public|private|internal|protected|protected\sinternal)?\s?(?<IsStatic>static)?\s?(?<IsReadOnly>readonly)?\s?(?<IsConstant>constant)?\s?(?<TypeName>\w+)?\s?(?<IsGeneric><(?<GenericType>.+)>)?\s(?<Name>\w+)(?<HasValue>\s?=(?<Value>.+))?\z");
+        private readonly Regex propertyDeclarationPattern = new Regex(@"^(?<AccsessModifier>public|private|internal|protected|protected\sinternal)?\s?(?<IsStatic>static)?\s?\s?(?<TypeName>\w+)?\s?(?<IsGeneric><(?<GenericType>.+)>)?\s(?<Name>\w+)\z");
+        private readonly Regex methodDeclarationPattern = new Regex(@"^(?<AccsessModifier>public|private|internal|protected|protected\sinternal)?\s?(?<IsStatic>static)?\s?(?<IsReadOnly>readonly)?\s?(?<IsConstant>constant)?\s?(?<ReturnTypeName>\w+)?\s?(?<IsGeneric><(?<GenericType>.+)>)?\s(?<Name>\w+)\s?(?<Params>\((?<Parameters>.)\))\z");
+        private readonly Regex constructorDeclarationPattern = new Regex(@"^(?<AccsessModifier>public|private|internal|protected|protected\sinternal)?\s?(?<IsStatic>static)?\s?(?<IsReadOnly>readonly)?\s?(?<IsConstant>constant)?\s?(?<ReturnTypeName>\w+)?\s?(?<IsGeneric><(?<GenericType>.+)>)\s?(?<Params>\((?<Parameters>.)\))\z");
 
         private string currentNameSpace;
         private string currentFilename;

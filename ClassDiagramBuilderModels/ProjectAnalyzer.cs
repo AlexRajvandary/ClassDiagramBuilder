@@ -1,4 +1,5 @@
 ﻿using ClassDiagramBuilder.Models.Parser;
+using ClassDiagramBuilder.Models.TypeAnalyzerModels;
 
 namespace ClassDiagramBuilder.Models
 {
@@ -42,12 +43,11 @@ namespace ClassDiagramBuilder.Models
             return tree;
         }
 
-        public Node<string> AnalyzeFile(string path)
+        public List<TypeInfo> AnalyzeFile(string path)
         {
             var typeParser = new TypeParser();
             var syntaxTree = typeParser.GetFileMemberHirarchy(path);
-            typeParser.GetTypeInfos(syntaxTree);
-            return syntaxTree;
+            return typeParser.GetTypeInfos(syntaxTree);
         }
     }
 }
