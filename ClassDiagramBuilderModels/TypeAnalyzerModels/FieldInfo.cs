@@ -21,5 +21,10 @@
         public bool IsReadOnly { get; private set; }
 
         public string TypeName { get; private set; }
+
+        public override string ToString()
+        {
+            return $"{TypeName} {Name}";
+        }
     }
 }

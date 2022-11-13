@@ -7,18 +7,74 @@
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="100">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="20"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
+        <Border 
+            BorderBrush="#FFCBCDCF"
+            BorderThickness="3"
+            CornerRadius="6"
+            Panel.ZIndex="1">
+            <Grid Background="#FFCBCDCF">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="2"/>
+                </Grid.RowDefinitions>
+                <TextBlock
+                    Text="{Binding TypeInfo.Name, RelativeSource={RelativeSource AncestorType=local:TypeView}}"
+                    HorizontalAlignment="Center"
+                    FontFamily="Segoe UI Light"
+                    FontSize="15"/>
 
-        <TextBlock Text="{Binding TypeInfo.Name, RelativeSource={RelativeSource AncestorType=local:TypeView}}"/>
-        <ListView FontSize="6">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock/>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                <ListView 
+                    x:Name="FieldList"
+                    Grid.Row="1"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    ScrollViewer.CanContentScroll="False"
+                    FontFamily="Segoe UI Light"
+                    ItemsSource="{Binding TypeInfo.Fields, RelativeSource={RelativeSource AncestorType=local:TypeView}}"
+                    />
+
+                <ListView 
+                    x:Name="ConstructorsList"
+                    Grid.Row="2"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    ScrollViewer.CanContentScroll="False"
+                    FontFamily="Segoe UI Light"
+                    ItemsSource="{Binding TypeInfo.Constructors, RelativeSource={RelativeSource AncestorType=local:TypeView}}"
+                    />
+
+                <ListView 
+                    x:Name="PropertiesList"
+                    Grid.Row="3"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    ScrollViewer.CanContentScroll="False"
+                    FontFamily="Segoe UI Light"
+                    ItemsSource="{Binding TypeInfo.Properties, RelativeSource={RelativeSource AncestorType=local:TypeView}}"
+                    />
+
+                <ListView 
+                    x:Name="MethodsList"
+                    Grid.Row="4"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    ScrollViewer.CanContentScroll="False"
+                    FontFamily="Segoe UI Light"
+                    ItemsSource="{Binding TypeInfo.Methods, RelativeSource={RelativeSource AncestorType=local:TypeView}}"
+                    />
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>

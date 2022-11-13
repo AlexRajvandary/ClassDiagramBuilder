@@ -94,8 +94,17 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
+                        <RowDefinition/>
                         <RowDefinition Height="10"/>
                     </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="55"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <localUI:TypeView TypeInfo="{Binding MainViewModel.TypeInfo}" Grid.Column="2"/>
                 </Grid>
                
             </Grid>
@@ -360,19 +369,7 @@
                     </ListView>
                 </StackPanel>
             </Grid>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="60"/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <localUI:TypeView Grid.Column="1" TypeInfo="{Binding MainViewModel.TypeInfo}"/>
-            </Grid>
+        
         </Grid>
 
     </Grid>

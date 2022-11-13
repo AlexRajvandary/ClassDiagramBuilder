@@ -7,7 +7,7 @@ namespace ClassDiagramBuilder.Models.Parser
 {
     public class TypeParser
     {
-        private readonly Regex typeInfoHeaderPattern = new Regex(@"^(?<AccsessModifier>public|private|internal|protected|protected\sinternal)?\s?(?<IsAbstract>abstract)?\s?(?<IsSealed>sealed)?\s?(?<IsStatic>static)?\s?(?<TypeKind>class|struct|interface){1}\s?(?<TypeName>[A-Za-z]+)\s?(?<Generic><(?<GenericType>.+)>)?\s?(?<Name>\w+)\z");
+        private readonly Regex typeInfoHeaderPattern = new Regex(@"^(?<AccsessModifier>public|private|internal|protected|protected\sinternal)?\s?(?<IsAbstract>abstract)?\s?(?<IsSealed>sealed)?\s?(?<IsStatic>static)?\s?(?<TypeKind>class|struct|interface){1}\s?(?<TypeName>[A-Za-z]+)\s?(?<Generic><(?<GenericType>.+)>)?\z");
         private readonly Regex fieldDeclarationPattern = new Regex(@"^(?<AccsessModifier>public|private|internal|protected|protected\sinternal)?\s?(?<IsStatic>static)?\s?(?<IsReadOnly>readonly)?\s?(?<IsConstant>constant)?\s?(?<TypeName>\w+)?\s?(?<IsGeneric><(?<GenericType>.+)>)?\s(?<Name>\w+)(?<HasValue>\s?=(?<Value>.+))?\z");
         private readonly Regex propertyDeclarationPattern = new Regex(@"^(?<AccsessModifier>public|private|internal|protected|protected\sinternal)?\s?(?<IsStatic>static)?\s?\s?(?<TypeName>\w+)?\s?(?<IsGeneric><(?<GenericType>.+)>)?\s(?<Name>\w+)\z");
         private readonly Regex methodDeclarationPattern = new Regex(@"^(?<AccsessModifier>public|private|internal|protected|protected\sinternal)?\s?(?<IsStatic>static)?\s?(?<IsReadOnly>readonly)?\s?(?<IsConstant>constant)?\s?(?<ReturnTypeName>\w+)?\s?(?<IsGeneric><(?<GenericType>.+)>)?\s(?<Name>\w+)\s?(?<Params>\((?<Parameters>.)\))\z");
@@ -185,7 +185,7 @@ namespace ClassDiagramBuilder.Models.Parser
                 : AcsessModifiers.Private;
 
             var typeKind = Enum.Parse<TypeKind>(typeInfoHeader.Groups["TypeKind"].Value, ignoreCase: true);
-            var name = typeInfoHeader.Groups["name"].Value;
+            var typeInfoName = typeInfoHeader.Groups["TypeName"].Value;
             var isAbstract = typeInfoHeader.Groups["IsAbstract"].Success;
             var isSealed = typeInfoHeader.Groups["IsSealed"].Success;
             var isStatic = typeInfoHeader.Groups["IsStatic"].Success;
@@ -210,19 +210,26 @@ namespace ClassDiagramBuilder.Models.Parser
                     {
                         var fieldHeader = fieldDeclarationPattern.Match(data);
 
-                        acsessModifier = fieldHeader.Groups["AccsessModifier"].Success
+                        var fieldAcsessModifier = fieldHeader.Groups["AccsessModifier"].Success
                             ? Enum.Parse<AcsessModifiers>(fieldHeader.Groups["AccsessModifier"].Value, ignoreCase: true)
                             : AcsessModifiers.Private;
 
-                        name = fieldHeader.Groups["Name"].Value;
+                        var fieldName = fieldHeader.Groups["Name"].Value;
                         var typeName = fieldHeader.Groups["TypeName"].Value;
-                        isAbstract = fieldHeader.Groups["IsAbstract"].Success;
-                        isStatic = fieldHeader.Groups["IsStatic"].Success;
-                        var isReadOnly = fieldHeader.Groups["IsReadOnly"].Success;
-                        var isConstant = fieldHeader.Groups["IsConstant"].Success;
-                        var value = fieldHeader.Groups["Value"].Value;
+                        var isFiledAbstract = fieldHeader.Groups["IsAbstract"].Success;
+                        var isFieldStatic = fieldHeader.Groups["IsStatic"].Success;
+                        var isFieldReadOnly = fieldHeader.Groups["IsReadOnly"].Success;
+                        var isFieldConstant = fieldHeader.Groups["IsConstant"].Success;
+                        var fieldValue = fieldHeader.Groups["Value"].Value;
 
-                        fields.Add(new FieldInfo(acsessModifier, isAbstract, isConstant, isStatic, isReadOnly, name, currentNameSpace, typeName));
+                        fields.Add(new FieldInfo(fieldAcsessModifier,
+                                                 isAbstract,
+                                                 isFieldConstant,
+                                                 isStatic,
+                                                 isFieldReadOnly,
+                                                 fieldName,
+                                                 currentNameSpace,
+                                                 typeName));
                     }
                     else if (propertyDeclarationPattern.IsMatch(data))
                     {
@@ -231,17 +238,17 @@ namespace ClassDiagramBuilder.Models.Parser
                           ? Enum.Parse<AcsessModifiers>(propertyHeader.Groups["AccsessModifier"].Value, ignoreCase: true)
                           : AcsessModifiers.Private;
 
-                        name = propertyHeader.Groups["Name"].Value;
+                        var propertyName = propertyHeader.Groups["Name"].Value;
                         var typeName = propertyHeader.Groups["TypeName"].Value;
-                        isAbstract = propertyHeader.Groups["IsAbstract"].Success;
-                        isStatic = propertyHeader.Groups["IsStatic"].Success;
+                        var isPropertyAbstract = propertyHeader.Groups["IsAbstract"].Success;
+                        var isPropertyStatic = propertyHeader.Groups["IsStatic"].Success;
 
                         properties.Add(new PropertyInfo(acsessModifier,
-                                                        isAbstract,
+                                                        isPropertyAbstract,
                                                         isAuto: true,
-                                                        isStatic,
+                                                        isPropertyStatic,
                                                         typeName,
-                                                        name,
+                                                        propertyName,
                                                         currentNameSpace));
                     }
                     else if (methodDeclarationPattern.IsMatch(data))
@@ -249,39 +256,37 @@ namespace ClassDiagramBuilder.Models.Parser
                         List<TypeInfo> parameters = new List<TypeInfo>();
 
                         var methodHeader = methodDeclarationPattern.Match(data);
-                        acsessModifier = methodHeader.Groups["AccsessModifier"].Success
+                        var methodAcsessModifier = methodHeader.Groups["AccsessModifier"].Success
                          ? Enum.Parse<AcsessModifiers>(methodHeader.Groups["AccsessModifier"].Value, ignoreCase: true)
                          : AcsessModifiers.Private;
 
-                        name = methodHeader.Groups["Name"].Value;
-                        var typeName = methodHeader.Groups["TypeName"].Value;
-                        isAbstract = methodHeader.Groups["IsAbstract"].Success;
-                        isStatic = methodHeader.Groups["IsStatic"].Success;
+                        var methodName = methodHeader.Groups["Name"].Value;
+                        var methodReturnType = methodHeader.Groups["TypeName"].Value;
+                        var isMethodAbstract = methodHeader.Groups["IsAbstract"].Success;
+                        var isMethodStatic = methodHeader.Groups["IsStatic"].Success;
 
-                        methods.Add(new MethodInfo(acsessModifier,
-                                                   isAbstract,
-                                                   isStatic,
-                                                   name,
+                        methods.Add(new MethodInfo(methodAcsessModifier,
+                                                   isMethodAbstract,
+                                                   isMethodStatic,
+                                                   methodName,
                                                    currentNameSpace,
                                                    parameters,
-                                                   typeName));
+                                                   methodReturnType));
                     }
                     else if (constructorDeclarationPattern.IsMatch(data))
                     {
                         List<TypeInfo> parameters = new List<TypeInfo>();
 
                         var constructorHeader = constructorDeclarationPattern.Match(data);
-                        acsessModifier = constructorHeader.Groups["AccsessModifier"].Success
+                        var constructorAcsessModifier = constructorHeader.Groups["AccsessModifier"].Success
                          ? Enum.Parse<AcsessModifiers>(constructorHeader.Groups["AccsessModifier"].Value, ignoreCase: true)
                          : AcsessModifiers.Private;
 
-                        name = constructorHeader.Groups["Name"].Value;
-                        var typeName = constructorHeader.Groups["TypeName"].Value;
-                        isAbstract = constructorHeader.Groups["IsAbstract"].Success;
-                        isStatic = constructorHeader.Groups["IsStatic"].Success;
+                        var isConstructorAbstract = constructorHeader.Groups["IsAbstract"].Success;
+                        var isConstructorStatic = constructorHeader.Groups["IsStatic"].Success;
 
-                        constructors.Add(new ConstructorInfo(acsessModifier,
-                                                             isStatic,
+                        constructors.Add(new ConstructorInfo(constructorAcsessModifier,
+                                                             isConstructorStatic,
                                                              currentNameSpace,
                                                              parameters));
                     }
@@ -298,7 +303,7 @@ namespace ClassDiagramBuilder.Models.Parser
                                         isAbstract,
                                         isStatic,
                                         methods,
-                                        name,
+                                        typeInfoName,
                                         currentNameSpace,
                                         properties,
                                         typeKind);
