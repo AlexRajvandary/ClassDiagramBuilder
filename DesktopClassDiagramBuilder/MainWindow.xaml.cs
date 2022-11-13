@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DesktopClassDiagramBuilder.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +24,11 @@ namespace DesktopClassDiagramBuilder
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = this;
+            MainViewModel = new MainViewModel();
         }
+
+        public MainViewModel MainViewModel { get; set; }
 
         private void ListViewItem_MouseEnter(object sender, MouseEventArgs e)
         {

@@ -8,13 +8,17 @@
              d:DesignHeight="150" d:DesignWidth="100">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="12"/>
+            <RowDefinition Height="20"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="{Binding Name}" Background="Transparent"/>
-        <ListView>
-           
+        <TextBlock Text="{Binding TypeInfo.Name, RelativeSource={RelativeSource AncestorType=local:TypeView}}"/>
+        <ListView FontSize="6">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
         </ListView>
     </Grid>
 </UserControl>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClassDiagramBuilder.Models.TypeAnalyzerModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,27 @@ namespace DesktopClassDiagramBuilder.UserControls
     /// </summary>
     public partial class TypeView : UserControl
     {
+        public static readonly DependencyProperty typeInfoProperty = DependencyProperty.Register("TypeInfo", typeof(TypeInfo), typeof(TypeView), new PropertyMetadata(null, (o,e)
+            => 
+        {
+            var i = 0;
+        }));
+
         public TypeView()
         {
             InitializeComponent();
+        }
+
+        public TypeInfo TypeInfo
+        {
+            get
+            {
+                return (TypeInfo)GetValue(typeInfoProperty);
+            }
+            set
+            {
+                SetValue(typeInfoProperty, value);
+            }
         }
     }
 }

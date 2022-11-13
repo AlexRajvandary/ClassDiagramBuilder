@@ -4,6 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DesktopClassDiagramBuilder"
+        xmlns:localUI="clr-namespace:DesktopClassDiagramBuilder.UserControls"
+        xmlns:localVM="clr-namespace:DesktopClassDiagramBuilder.ViewModels"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
         Title="Class diagram builder"
@@ -95,7 +97,7 @@
                         <RowDefinition Height="10"/>
                     </Grid.RowDefinitions>
                 </Grid>
-
+               
             </Grid>
 
             <!--// Navigation Panel //-->
@@ -359,9 +361,17 @@
                 </StackPanel>
             </Grid>
             <Grid>
-                <Canvas Margin="60,0,0,0">
-                    
-                </Canvas>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <localUI:TypeView Grid.Column="1" TypeInfo="{Binding MainViewModel.TypeInfo}"/>
             </Grid>
         </Grid>
 
