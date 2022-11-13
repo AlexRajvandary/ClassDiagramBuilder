@@ -3,13 +3,14 @@
     public class PropertyInfo : MemberInfo
     {
         public PropertyInfo(AcsessModifiers acsessModifier,
-                            AcsessModifiers getterAcsessModifier,
-                            AcsessModifiers setterAcsessModifier,
                             bool isAbstract,
                             bool isAuto,
                             bool isStatic,
+                            string typeName,
                             string name,
-                            string nameSpace) : base(acsessModifier, isAbstract, isStatic, name, nameSpace)
+                            string nameSpace,
+                            AcsessModifiers getterAcsessModifier = AcsessModifiers.Private,
+                            AcsessModifiers setterAcsessModifier = AcsessModifiers.Private) : base(acsessModifier, isAbstract, isStatic, name, nameSpace)
         {
             GetterAcsessModifier = getterAcsessModifier;
             IsAuto = isAuto;

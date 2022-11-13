@@ -3,6 +3,17 @@
     public class MethodInfo : MemberInfo
     {
         public MethodInfo(AcsessModifiers acsessModifier,
+                         bool isAbstract,
+                         bool isStatic,
+                         string name,
+                         string nameSpace,
+                         List<TypeInfo> parameters,
+                         string returnTypeName) : this(acsessModifier, isAbstract, isStatic, name, nameSpace, parameters, TypeInfo.GetUnfilledTypeInfo(returnTypeName))
+        {
+           
+        }
+
+        public MethodInfo(AcsessModifiers acsessModifier,
                           bool isAbstract,
                           bool isStatic,
                           string name,

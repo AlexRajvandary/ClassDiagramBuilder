@@ -10,7 +10,6 @@
         {
             Kind = typeKind;
         }
-
         public TypeInfo(AcsessModifiers acsessModifier,
                         bool isAbstract,
                         bool isStatic,
@@ -53,5 +52,7 @@
         public List<PropertyInfo> Properties { get; private set; } = new List<PropertyInfo>();
 
         public override string ToString() => $"{Namespace}.{Name}";
+
+        public static TypeInfo GetUnfilledTypeInfo(string name) => new TypeInfo(false, false, TypeKind.Undefined, name, nameSpace: null);
     }
 }
