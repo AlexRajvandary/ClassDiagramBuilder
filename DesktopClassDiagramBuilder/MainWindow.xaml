@@ -259,12 +259,22 @@
                                     </Button.Content>
 
                                 </Button>
-                                <TextBlock 
-                                    Text="Set directory"
+                                <TextBox 
+                                    Text="{Binding MainViewModel.Path}"
                                     Margin="20, -2.5 ,0,0"
                                     FontSize="20"
-                                    Foreground="AliceBlue"
-                                    FontWeight="Regular" FontFamily="Corbel"/>
+                                    Foreground="Black"
+                                    Background="AliceBlue"
+                                    FontWeight="Regular"
+                                    FontFamily="Corbel"
+                                    Width="200"/>
+                                <Button
+                                    Margin="10,0,0,0"
+                                    Width="25"
+                                    Height="25"
+                                    Command="{Binding MainViewModel.Calculate}"/>
+
+
                             </StackPanel>
 
                             <!--// Tooltip //-->

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using ClassDiagramBuilder;
 using ClassDiagramBuilder.Models;
 using ClassDiagramBuilder.Models.TypeAnalyzerModels;
@@ -12,18 +13,49 @@ namespace DesktopClassDiagramBuilder.ViewModels
 {
     public class MainViewModel : PropertyChangedNotifier
     {
+        ICommand calculate;
+        private string path;
+        private Graph<TypeInfo> types;
         private TypeInfo typeInfo;
         private static ProjectAnalyzer projectAnalyzer;
 
         public MainViewModel()
         {
             projectAnalyzer = new ProjectAnalyzer();
-            TypeInfo = projectAnalyzer.AnalyzeFile(@"C:\Users\Alex Raj\source\repos\ClassDiagramBuilder\ClassDiagramBuilder\Program.cs").FirstOrDefault();
+            calculate = new RelayCommand(GetTypeInfos);
         }
 
-        public Graph<TypeInfo> Types { get; set; }
+        public ICommand Calculate
+        {
+            get => calculate;
+            set
+            {
+                calculate = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public TypeInfo TypeInfo 
+        public string Path
+        {
+            get => path;
+            set
+            {
+                path = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Graph<TypeInfo> Types
+        {
+            get => types;
+            set
+            {
+                types = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public TypeInfo TypeInfo
         {
             get => typeInfo;
             set
@@ -31,6 +63,11 @@ namespace DesktopClassDiagramBuilder.ViewModels
                 typeInfo = value;
                 OnPropertyChanged();
             }
+        }
+
+        public void GetTypeInfos()
+        {
+            TypeInfo = projectAnalyzer?.AnalyzeFile(Path)?.FirstOrDefault();
         }
     }
 }
