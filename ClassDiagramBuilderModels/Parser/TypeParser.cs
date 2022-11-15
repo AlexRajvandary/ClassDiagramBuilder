@@ -43,7 +43,7 @@ namespace ClassDiagramBuilder.Models.Parser
 
             var typeInfos = new List<TypeInfo>();
             var filename = FileMemberHirarchy?.Header;
-            var nameSpace = FileMemberHirarchy?.Children?.FirstOrDefault()?.Header;
+            var nameSpace = FileMemberHirarchy?.Children?.LastOrDefault()?.Header;
 
             if (string.IsNullOrEmpty(filename))
             {
@@ -58,7 +58,7 @@ namespace ClassDiagramBuilder.Models.Parser
             currentFilename = filename;
             currentNameSpace = nameSpace;
 
-            if (FileMemberHirarchy.Children.LastOrDefault().Children.Any())
+            if (FileMemberHirarchy?.Children?.LastOrDefault()?.Children?.Any() ?? false)
             {
                 foreach (var rawTypeInfo in FileMemberHirarchy.Children.LastOrDefault().Children)
                 {

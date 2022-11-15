@@ -71,7 +71,7 @@
                             <fa:ImageAwesome Icon="Bars" Foreground="White" Height="25" VerticalAlignment="Top" Width="25"/>
 
                         </Border>
-                        
+
                     </ControlTemplate>
 
                 </Setter.Value>
@@ -106,7 +106,7 @@
 
                     <localUI:TypeView TypeInfo="{Binding MainViewModel.TypeInfo}" Grid.Column="2"/>
                 </Grid>
-               
+
             </Grid>
 
             <!--// Navigation Panel //-->
@@ -151,7 +151,7 @@
                                                 Storyboard.TargetName="nav_pnl"
                                                 Storyboard.TargetProperty="Width"
                                                 BeginTime="0:0:0"
-                                                From="300" To="55"
+                                                From="200" To="55"
                                                 Duration="0:0:0.2">
 
                                             </DoubleAnimation>
@@ -173,7 +173,7 @@
                                                 Storyboard.TargetName="nav_pnl"
                                                 Storyboard.TargetProperty="Width"
                                                 BeginTime="0:0:0"
-                                                From="55" To="300"
+                                                From="55" To="200"
                                                 Duration="0:0:0.3">
 
                                             </DoubleAnimation>
@@ -208,7 +208,7 @@
                                       >
 
                             <StackPanel Orientation="Horizontal"
-                                        Width="300">
+                                        Width="200">
 
                                 <Button Background="Transparent"
                                         Foreground="AliceBlue"
@@ -220,11 +220,11 @@
                                     </Button.Content>
                                 </Button>
                                 <TextBlock 
-                                    Text="HOME"
-                                    Margin="20, -2.5,0,0"
-                                    FontSize="20"
+                                    Text="Home"
+                                    FontSize="28"
                                     Foreground="AliceBlue"
-                                    FontWeight="Regular"/>
+                                    FontWeight="Regular"
+                                    FontFamily="Corbel" Height="32" Margin="10,0,0,0"/>
                             </StackPanel>
 
                             <!--// Tooltip //-->
@@ -242,36 +242,44 @@
 
 
                         <ListViewItem HorizontalAlignment="Left"
-                                      Margin="0,0,0,0" MouseEnter="ListViewItem_MouseEnter"
+                                      Margin="0,0,0,0" MouseEnter="ListViewItem_MouseEnter" Width="200"
                                       >
 
                             <StackPanel Orientation="Horizontal"
-                                        Width="300">
-                                <Button Margin="10,0,0,0"
-                                        Width="25"
-                                        Height="25"
+                                        Width="200">
+                                <Button Margin="8,0,0,0"
+                                        Width="28"
+                                        Height="30"
                                         Background="Transparent"
                                         BorderBrush="Transparent"
                                         Foreground="AliceBlue"
                                         >
                                     <Button.Content>
-                                        <fa:FontAwesome Icon="SearchPlus" FontSize="20"/>
+                                        <fa:FontAwesome Icon="SearchPlus" FontSize="22"/>
                                     </Button.Content>
 
                                 </Button>
                                 <TextBox 
                                     Text="{Binding MainViewModel.Path}"
-                                    Margin="20, -2.5 ,0,0"
-                                    FontSize="20"
+                                    Margin="10,0,0,0"
+                                    FontSize="16"
                                     Foreground="Black"
                                     Background="AliceBlue"
                                     FontWeight="Regular"
                                     FontFamily="Corbel"
-                                    Width="200"/>
+                                    Width="90"
+                                    Height="27"/>
                                 <Button
-                                    Margin="10,0,0,0"
-                                    Width="25"
-                                    Height="25"
+                                    Margin="2,0,0,0"
+                                    Width="27"
+                                    Height="27"
+                                     Background="Gray"
+                                    Click="Button_Click"/>
+                                <Button
+                                    Margin="2,0,0,0"
+                                    Width="27"
+                                    Height="27"
+                                     Background="Gray"
                                     Command="{Binding MainViewModel.Calculate}"/>
 
 
@@ -292,11 +300,11 @@
                         <!--// Messages //-->
 
                         <ListViewItem HorizontalAlignment="Left"
-                                      Margin="0,0,0,15" MouseEnter="ListViewItem_MouseEnter"
+                                      Margin="0,0,0,15" MouseEnter="ListViewItem_MouseEnter" Width="200"
                                       >
 
                             <StackPanel Orientation="Horizontal"
-                                        Width="300">
+                                        Width="200">
 
                                 <Button Background="Transparent"
                                         Foreground="AliceBlue"
@@ -307,7 +315,14 @@
                                         <fa:FontAwesome Icon="Edit"/>
                                     </Button.Content>
                                 </Button>
-                                <TextBlock Text="settings" FontSize="20" Foreground="AliceBlue" Margin="20,2.5,0,0" FontWeight="Regular" FontFamily="Corbel"/>
+                                <TextBlock Text="Settings" 
+                                           FontSize="28"
+                                           Foreground="AliceBlue"
+                                           FontWeight="Regular"
+                                           FontFamily="Corbel"
+                                           Height="34" 
+                                           Width="95"
+                                           Margin="5,0,0,0"/>
                             </StackPanel>
 
                             <!--// Tooltip //-->
@@ -379,7 +394,7 @@
                     </ListView>
                 </StackPanel>
             </Grid>
-        
+
         </Grid>
 
     </Grid>

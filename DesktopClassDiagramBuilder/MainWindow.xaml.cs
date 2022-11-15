@@ -1,6 +1,7 @@
 ﻿using DesktopClassDiagramBuilder.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -66,6 +67,21 @@ namespace DesktopClassDiagramBuilder
         private void CloseBtn_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new Microsoft.Win32.OpenFileDialog();
+
+            // Show open file dialog box
+            bool? result = dialog.ShowDialog();
+
+            // Process open file dialog box results
+            if (result == true)
+            {
+                // Open document
+                MainViewModel.Path = dialog.FileName;
+            }
         }
     }
 }
