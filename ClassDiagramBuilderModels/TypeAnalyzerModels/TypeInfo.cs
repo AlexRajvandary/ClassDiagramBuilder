@@ -10,15 +10,17 @@
         {
             Kind = typeKind;
         }
+
         public TypeInfo(AcsessModifiers acsessModifier,
                         bool isAbstract,
                         bool isStatic,
                         TypeKind typeKind,
                         string name,
-                        string nameSpace) : this(acsessModifier, null, null, isAbstract, isStatic, null, name, nameSpace, null, typeKind) { }
+                        string nameSpace) : this(acsessModifier, null, null, null, isAbstract, isStatic, null, name, nameSpace, null, typeKind) { }
 
         public TypeInfo(AcsessModifiers acsessModifier,
                         List<ConstructorInfo> constructors,
+                        List<EventInfo> eventInfos,
                         List<FieldInfo> fields,
                         bool isAbstract,
                         bool isStatic,
@@ -29,6 +31,7 @@
                         TypeKind typeKind) : base(acsessModifier, isAbstract, isStatic, name, nameSpace)
         {
             Constructors = constructors;
+            Events = eventInfos;
             Fields = fields;
             Kind = typeKind;
             Methods = methods;
@@ -37,19 +40,21 @@
 
         public TypeInfo BaseClass { get; private set; }
 
-        public List<TypeInfo> BaseInterfaces { get; private set; } = new List<TypeInfo>();
+        public List<TypeInfo> BaseInterfaces { get; private set; }
 
-        public List<ConstructorInfo> Constructors { get; private set; } = new List<ConstructorInfo>();
+        public List<ConstructorInfo> Constructors { get; private set; }
 
         public bool Created { get; private set; }
 
-        public List<FieldInfo> Fields { get; private set; } = new List<FieldInfo>();
+        public List<EventInfo> Events { get; private set; } 
+
+        public List<FieldInfo> Fields { get; private set; } 
 
         public TypeKind Kind { get; private set; }
 
-        public List<MethodInfo> Methods { get; private set; } = new List<MethodInfo>();
+        public List<MethodInfo> Methods { get; private set; } 
 
-        public List<PropertyInfo> Properties { get; private set; } = new List<PropertyInfo>();
+        public List<PropertyInfo> Properties { get; private set; }
 
         public override string ToString() => $"{Namespace}.{Name}";
 

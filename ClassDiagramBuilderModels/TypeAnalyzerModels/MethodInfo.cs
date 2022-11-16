@@ -28,5 +28,7 @@
         public List<TypeInfo> Parameters { get; private set; }
 
         public TypeInfo ReturnType { get; private set; }
+
+        public override string ToString() => $"{ReturnType.Name} {Name} ()";
     }
 }

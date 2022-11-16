@@ -7,11 +7,13 @@ namespace ClassDiagramBuilder.Models.Parser
 {
     public class TypeParser
     {
-        private readonly Regex typeInfoHeaderPattern = new Regex(@"^(?<AccsessModifier>public|private|internal|protected|protected\sinternal)?\s?(?<IsAbstract>abstract)?\s?(?<IsSealed>sealed)?\s?(?<IsStatic>static)?\s?(?<TypeKind>class|struct|interface){1}\s?(?<TypeName>[A-Za-z]+)\s?(?<Generic><(?<GenericType>.+)>)?\s?(?<IsDerrived>:\s?((?<Derrived>\w+)\s?)+)?\z");
-        private readonly Regex fieldDeclarationPattern = new Regex(@"^(?<AccsessModifier>public|private|internal|protected|protected\sinternal)?\s?(?<IsStatic>static)?\s?(?<IsReadOnly>readonly)?\s?(?<IsConstant>constant)?\s?(?<TypeName>\w+)?\s?(?<IsGeneric><(?<GenericType>.+)>)?\s(?<Name>\w+)(?<HasValue>\s?=(?<Value>.+))?\z");
-        private readonly Regex propertyDeclarationPattern = new Regex(@"^(?<AccsessModifier>public|private|internal|protected|protected\sinternal)?\s?(?<IsStatic>static)?\s?\s?(?<TypeName>\w+)?\s?(?<IsGeneric><(?<GenericType>.+)>)?\s(?<Name>\w+)\z");
-        private readonly Regex methodDeclarationPattern = new Regex(@"^(?<AccsessModifier>public|private|internal|protected|protected\sinternal)?\s?(?<IsStatic>static)?\s?(?<IsReadOnly>readonly)?\s?(?<IsConstant>constant)?\s?(?<ReturnTypeName>\w+)?\s?(?<IsGeneric><(?<GenericType>.+)>)?\s(?<Name>\w+)\s?(?<Params>\((?<Parameters>.)\))\z");
-        private readonly Regex constructorDeclarationPattern = new Regex(@"^(?<AccsessModifier>public|private|internal|protected|protected\sinternal)?\s?(?<IsStatic>static)?\s?(?<IsReadOnly>readonly)?\s?(?<IsConstant>constant)?\s?(?<ReturnTypeName>\w+)?\s?(?<IsGeneric><(?<GenericType>.+)>)\s?(?<Params>\((?<Parameters>.)\))\z");
+        private readonly Regex typeInfoHeaderPattern = new Regex(@"^(?<AccsessModifier>public|private|internal|protected|protected\sinternal)?\s?(?<IsAbstract>abstract)?\s?(?<IsStatic>static)?\s?(?<IsSealed>sealed)?\s?(?<IsPartial>partial)?\s?(?<TypeKind>class|struct|interface|enum){1}\s?(?<TypeName>[A-Za-z0-9]+)\s?(?<Generic><(?<GenericType>[A-Za-z0-9]+)>)?\s?(?<IsDerrived>:\s?((?<Derrived>\w+)\s?)+)?\z");
+        private readonly Regex fieldDeclarationPattern = new Regex(@"^(?<AccsessModifier>public|private|internal|protected|protected\sinternal)?\s?(?<IsStatic>static)?\s?(?<IsReadOnly>readonly)?\s?(?<IsConstant>constant)?\s?(?<TypeName>\w+)?\s?(?<IsGeneric><(?<GenericType>.+)>)?\s(?<Name>[A-Za-z0-9]+)(?<HasValue>\s?=(?<Value>.+))?\z");
+        private readonly Regex propertyDeclarationPattern = new Regex(@"^(?<AccsessModifier>public|private|internal|protected|protected\sinternal)?\s?(?<IsStatic>static)?\s?(?<TypeName>\w+)?\s?(?<IsGeneric><(?<GenericType>.+)>)?\s(?<Name>\w+)\z");
+        private readonly Regex methodDeclarationPattern = new Regex(@"^(?<AccsessModifier>public|private|internal|protected|protected\sinternal)?\s?(?<IsStatic>static)?\s?(?<ReturnTypeName>\w+){1}\s?(?<IsGeneric><(?<GenericType>.+)>)?\s(?<Name>\w+){1}\s(?<Params>\((.+)\))\z");
+        private readonly Regex constructorDeclarationPattern = new Regex(@"^(?<AccsessModifier>public|private|internal|protected|protected\sinternal)?\s?(?<IsStatic>static)?\s?(?<ReturnTypeName>\w+){1}\s?(?<Params>\((?<Parameters>.+)\))\z");
+        private readonly Regex eventDeclarationPattern = new Regex(@"^(?<AccsessModifier>public|private|internal|protected|protected\sinternal)?\s?event{1}\s(?<DelegateType>\w+)\s(?<Name>\w+)\z");
+        private readonly Regex commentPattern = new Regex(@"^(\/\/\/|\/\/|\/\*)\s?(?<OpenXMLComment><summary>)?\s?(?<CommentContent>.*)?\s?(?<CloseXMLComment></summary>)?\s?\z");
 
         private string currentNameSpace;
         private string currentFilename;
@@ -62,7 +64,7 @@ namespace ClassDiagramBuilder.Models.Parser
             {
                 foreach (var rawTypeInfo in FileMemberHirarchy.Children.LastOrDefault().Children)
                 {
-                    var typeInfo = GetTypeInfo(rawTypeInfo);
+                    var typeInfo = BuildTypeInfo(rawTypeInfo);
                     if (typeInfo != null)
                     {
                         typeInfos.Add(typeInfo);
@@ -164,7 +166,7 @@ namespace ClassDiagramBuilder.Models.Parser
             return root;
         }
 
-        private TypeInfo GetTypeInfo(Node<string> rawTypeInfo)
+        private TypeInfo BuildTypeInfo(Node<string> rawTypeInfo)
         {
             if (string.IsNullOrEmpty(currentNameSpace))
             {
@@ -194,6 +196,7 @@ namespace ClassDiagramBuilder.Models.Parser
             var properties = new List<PropertyInfo>();
             var methods = new List<MethodInfo>();
             var constructors = new List<ConstructorInfo>();
+            var events = new List<EventInfo>();
 
             if (rawTypeInfo.Children != null)
             {
@@ -206,7 +209,7 @@ namespace ClassDiagramBuilder.Models.Parser
                         continue;
                     }
 
-                    if (fieldDeclarationPattern.IsMatch(data))
+                    if (!memberInfo.Children?.Any() ?? true && fieldDeclarationPattern.IsMatch(data))
                     {
                         var fieldHeader = fieldDeclarationPattern.Match(data);
 
@@ -253,7 +256,7 @@ namespace ClassDiagramBuilder.Models.Parser
                     }
                     else if (methodDeclarationPattern.IsMatch(data))
                     {
-                        List<TypeInfo> parameters = new List<TypeInfo>();
+                        var parameters = new List<TypeInfo>();
 
                         var methodHeader = methodDeclarationPattern.Match(data);
                         var methodAcsessModifier = methodHeader.Groups["AccsessModifier"].Success
@@ -275,7 +278,7 @@ namespace ClassDiagramBuilder.Models.Parser
                     }
                     else if (constructorDeclarationPattern.IsMatch(data))
                     {
-                        List<TypeInfo> parameters = new List<TypeInfo>();
+                        var parameters = new List<TypeInfo>();
 
                         var constructorHeader = constructorDeclarationPattern.Match(data);
                         var constructorAcsessModifier = constructorHeader.Groups["AccsessModifier"].Success
@@ -284,11 +287,26 @@ namespace ClassDiagramBuilder.Models.Parser
 
                         var isConstructorAbstract = constructorHeader.Groups["IsAbstract"].Success;
                         var isConstructorStatic = constructorHeader.Groups["IsStatic"].Success;
+                        var returnTypeName = constructorHeader.Groups["ReturnTypeName"].Value;
 
                         constructors.Add(new ConstructorInfo(constructorAcsessModifier,
                                                              isConstructorStatic,
                                                              currentNameSpace,
+                                                             returnTypeName,
                                                              parameters));
+                    }
+                    else if(eventDeclarationPattern.IsMatch(data))
+                    {
+                        var eventHeader = eventDeclarationPattern.Match(data);
+
+                        var eventAccessModifier = eventHeader.Groups["AccsessModifier"].Success
+                         ? Enum.Parse<AcsessModifiers>(eventHeader.Groups["AccsessModifier"].Value, ignoreCase: true)
+                         : AcsessModifiers.Private;
+
+                        var delegateType = eventHeader.Groups["DelegateType"].Value;
+                        var eventName = eventHeader.Groups["Name"].Value;
+
+                        events.Add(new EventInfo(eventAccessModifier, delegateType, false, false, eventName, currentNameSpace));
                     }
                     else
                     {
@@ -299,6 +317,7 @@ namespace ClassDiagramBuilder.Models.Parser
 
             var typeInfo = new TypeInfo(acsessModifier,
                                         constructors,
+                                        events,
                                         fields,
                                         isAbstract,
                                         isStatic,

@@ -22,5 +22,10 @@
         public bool IsAuto { get; private set; }
 
         public AcsessModifiers SetterAcsessModifier { get; private set; }
+
+        public override string ToString()
+        {
+            return $"{AcsessModifier} {Name}";
+        }
     }
 }

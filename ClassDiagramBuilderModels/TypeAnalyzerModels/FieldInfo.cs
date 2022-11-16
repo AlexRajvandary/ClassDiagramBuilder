@@ -24,7 +24,7 @@
 
         public override string ToString()
         {
-            return $"{TypeName} {Name}";
+            return $"{AcsessModifier} {TypeName} {Name}";
         }
     }
 }
