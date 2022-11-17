@@ -39,10 +39,10 @@
             get => parent;
             set
             {
-                if (parent == null)
+                if (parent != value)
                 {
                     parent = value;
-                    parent.AddChild(this);
+                    parent?.AddChild(this);
                 }
             }
         }

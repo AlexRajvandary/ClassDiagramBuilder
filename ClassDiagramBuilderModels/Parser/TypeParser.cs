@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.Windows.Input;
 using ClassDiagramBuilder.Models.TypeAnalyzerModels;
 
 namespace ClassDiagramBuilder.Models.Parser
@@ -30,6 +31,7 @@ namespace ClassDiagramBuilder.Models.Parser
             if (IsBracketsBalanced(data))
             {
                 var fileMemberHirarchy = GetFileMembersTree(Path.GetFileName(path), data);
+
                 return fileMemberHirarchy;
             }
             else
@@ -99,68 +101,53 @@ namespace ClassDiagramBuilder.Models.Parser
 
         private Node<string> GetFileMembersTree(string filename, string fileRawContent)
         {
-            var openBracketsIndexStack = new Stack<int>();
             var root = new Node<string>();
             root.Header = filename;
             var newChildNode = new Node<string>();
             root.AddChild(newChildNode);
             var currentNode = newChildNode;
 
-            for (var charIndex = 0; charIndex < fileRawContent.Length; charIndex++)
+            var previousCharacter = '\0';
+            var previousPreviousCharacter = '\0';
+
+            foreach (var currentCharacter in fileRawContent)
             {
-                var previousChar = charIndex - 1 > 0 ? fileRawContent[charIndex - 1] : char.MinValue;
-                var currentChar = fileRawContent[charIndex];
-                var nextChar = charIndex + 1 < fileRawContent.Length ? fileRawContent[charIndex + 1] : char.MinValue;
-
-                if (currentChar == '{')
+                if (currentCharacter != '}' && currentCharacter != ';' && 
+                    (currentCharacter == '{'
+                    || currentCharacter != ' ' && (previousCharacter == '}' || previousCharacter == ';') 
+                    || previousCharacter == ' ' && (previousPreviousCharacter == '}' || previousPreviousCharacter == ';') && currentCharacter != ' '))
                 {
-                    openBracketsIndexStack.Push(charIndex);
+                    var child = new Node<string>();
+                    currentNode.AddChild(child);
+                    currentNode = child;
 
-                    var childNode = new Node<string>();
-                    currentNode.AddChild(childNode);
-                    currentNode = childNode;
-                }
-                else if (currentChar == '}')
-                {
-                    if (!openBracketsIndexStack.TryPop(out var _))
+                    if(currentCharacter != '{' && currentCharacter != '}' && currentCharacter != ';')
                     {
-                        Trace.WriteLine($"To many closed brackets: {charIndex}");
-                        return null;
-                    }
-                    else
-                    {
-                        var parent = currentNode.Parent;
-                        if (string.IsNullOrEmpty(currentNode.Header))
-                        {
-                            parent.RemoveChild(currentNode);
-                        }
-
-                        currentNode = parent;
+                        currentNode.Header += currentCharacter;
                     }
                 }
-                else if (currentChar == ';')
+                else if (currentCharacter == '}' || currentCharacter == ';')
                 {
-                    if (currentNode.Parent != null)
+                    var childToRemove = currentNode;
+                    currentNode = currentNode.Parent;
+
+                    if (string.IsNullOrWhiteSpace(childToRemove.Header))
                     {
-                        currentNode = currentNode.Parent;
+                        currentNode.RemoveChild(childToRemove);
                     }
                 }
                 else
                 {
-                    if (previousChar == ';' && nextChar != '}' || previousChar == '}')
+                    if (currentCharacter == ' ' && (previousCharacter == ';' || previousCharacter == '}'))
                     {
-                        var child = new Node<string>();
-                        currentNode.AddChild(child);
-                        currentNode = child;
+                        continue;
                     }
-                    else
-                    {
-                        if (!currentNode.HeaderReadOnly)
-                        {
-                            currentNode.Header += fileRawContent[charIndex];
-                        }
-                    }
+
+                    currentNode.Header += currentCharacter;
                 }
+
+                previousPreviousCharacter = previousCharacter;
+                previousCharacter = currentCharacter;
             }
 
             return root;
@@ -295,7 +282,7 @@ namespace ClassDiagramBuilder.Models.Parser
                                                              returnTypeName,
                                                              parameters));
                     }
-                    else if(eventDeclarationPattern.IsMatch(data))
+                    else if (eventDeclarationPattern.IsMatch(data))
                     {
                         var eventHeader = eventDeclarationPattern.Match(data);
 
