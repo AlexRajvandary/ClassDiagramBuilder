@@ -31,7 +31,6 @@ namespace ClassDiagramBuilder.Models.Parser
             if (IsBracketsBalanced(data))
             {
                 var fileMemberHirarchy = GetFileMembersTree(Path.GetFileName(path), data);
-
                 return fileMemberHirarchy;
             }
             else
@@ -101,6 +100,7 @@ namespace ClassDiagramBuilder.Models.Parser
 
         private Node<string> GetFileMembersTree(string filename, string fileRawContent)
         {
+            var insideBlockBracketsStack = new Stack<char>();
             var root = new Node<string>();
             root.Header = filename;
             var newChildNode = new Node<string>();
@@ -117,33 +117,55 @@ namespace ClassDiagramBuilder.Models.Parser
                     || currentCharacter != ' ' && (previousCharacter == '}' || previousCharacter == ';') 
                     || previousCharacter == ' ' && (previousPreviousCharacter == '}' || previousPreviousCharacter == ';') && currentCharacter != ' '))
                 {
-                    var child = new Node<string>();
-                    currentNode.AddChild(child);
-                    currentNode = child;
-
-                    if(currentCharacter != '{' && currentCharacter != '}' && currentCharacter != ';')
+                    if(currentNode.Level < 5)
                     {
-                        currentNode.Header += currentCharacter;
+                        var child = new Node<string>();
+                        currentNode.AddChild(child);
+                        currentNode = child;
+
+                        if (currentCharacter != '{' && currentCharacter != '}' && currentCharacter != ';')
+                        {
+                            currentNode.Header += currentCharacter;
+                        }
+                    }
+                    else
+                    {
+                        insideBlockBracketsStack.Push(currentCharacter);
+                        currentNode.Data += currentCharacter;
                     }
                 }
                 else if (currentCharacter == '}' || currentCharacter == ';')
                 {
-                    var childToRemove = currentNode;
-                    currentNode = currentNode.Parent;
-
-                    if (string.IsNullOrWhiteSpace(childToRemove.Header))
+                    if(currentNode.Level < 5)
                     {
-                        currentNode.RemoveChild(childToRemove);
+                        var childToRemove = currentNode;
+                        currentNode = currentNode.Parent;
+
+                        if (string.IsNullOrWhiteSpace(childToRemove.Header))
+                        {
+                            currentNode.RemoveChild(childToRemove);
+                        }
+                    }
+                    else
+                    {
+                        currentNode.Data += currentCharacter;
                     }
                 }
                 else
                 {
-                    if (currentCharacter == ' ' && (previousCharacter == ';' || previousCharacter == '}'))
+                    if(currentNode.Level < 5)
                     {
-                        continue;
-                    }
+                        if (currentCharacter == ' ' && (previousCharacter == ';' || previousCharacter == '}'))
+                        {
+                            continue;
+                        }
 
-                    currentNode.Header += currentCharacter;
+                        currentNode.Header += currentCharacter;
+                    }
+                    else
+                    {
+                        currentNode.Data += currentCharacter;
+                    }
                 }
 
                 previousPreviousCharacter = previousCharacter;
