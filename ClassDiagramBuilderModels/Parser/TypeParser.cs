@@ -19,7 +19,7 @@ namespace ClassDiagramBuilder.Models.Parser
         private string currentNameSpace;
         private string currentFilename;
 
-        public Node<string>? GetFileMemberHirarchy(string path)
+        public Node<string>? GetFileMemberHirarchy(string path, int parseDepth = 5)
         {
             string data;
             using (var sr = new StreamReader(path))
@@ -28,9 +28,9 @@ namespace ClassDiagramBuilder.Models.Parser
             }
 
             data = Regex.Replace(data, @"\s+", " ");
-            if (IsBracketsBalanced(data))
+            if (AreBracketsBalanced(data))
             {
-                var fileMemberHirarchy = GetFileMembersTree(Path.GetFileName(path), data);
+                var fileMemberHirarchy = GetFileMembersTree(Path.GetFileName(path), data, parseDepth);
                 return fileMemberHirarchy;
             }
             else
@@ -76,7 +76,7 @@ namespace ClassDiagramBuilder.Models.Parser
             return typeInfos;
         }
 
-        private bool IsBracketsBalanced(string str)
+        private bool AreBracketsBalanced(string str)
         {
             var stack = new Stack<int>();
 
@@ -98,7 +98,7 @@ namespace ClassDiagramBuilder.Models.Parser
             return stack.Count == 0;
         }
 
-        private Node<string> GetFileMembersTree(string filename, string fileRawContent)
+        private Node<string> GetFileMembersTree(string filename, string fileRawContent, int parseDepth)
         {
             var insideBlockBracketsStack = new Stack<char>();
             var root = new Node<string>();
@@ -112,31 +112,35 @@ namespace ClassDiagramBuilder.Models.Parser
 
             foreach (var currentCharacter in fileRawContent)
             {
-                if (currentCharacter != '}' && currentCharacter != ';' && 
+                if (currentCharacter != '}' && currentCharacter != ';' &&
                     (currentCharacter == '{'
-                    || currentCharacter != ' ' && (previousCharacter == '}' || previousCharacter == ';') 
+                    || currentCharacter != ' ' && (previousCharacter == '}' || previousCharacter == ';')
                     || previousCharacter == ' ' && (previousPreviousCharacter == '}' || previousPreviousCharacter == ';') && currentCharacter != ' '))
                 {
-                    if(currentNode.Level < 5)
+                    if (currentNode.Level < parseDepth)
                     {
                         var child = new Node<string>();
                         currentNode.AddChild(child);
                         currentNode = child;
 
-                        if (currentCharacter != '{' && currentCharacter != '}' && currentCharacter != ';')
+                        if (currentCharacter != '{' && currentCharacter != '}' && currentCharacter != ';' && currentCharacter != ' ')
                         {
                             currentNode.Header += currentCharacter;
                         }
                     }
                     else
                     {
-                        insideBlockBracketsStack.Push(currentCharacter);
-                        currentNode.Data += currentCharacter;
+                        if(currentCharacter == '{')
+                        {
+                            insideBlockBracketsStack.Push(currentCharacter);
+                        }
+                        
+                        currentNode.Header += currentCharacter;
                     }
                 }
                 else if (currentCharacter == '}' || currentCharacter == ';')
                 {
-                    if(currentNode.Level < 5)
+                    if (currentNode.Level < parseDepth)
                     {
                         var childToRemove = currentNode;
                         currentNode = currentNode.Parent;
@@ -148,24 +152,41 @@ namespace ClassDiagramBuilder.Models.Parser
                     }
                     else
                     {
-                        currentNode.Data += currentCharacter;
+                        if(currentCharacter != '}')
+                        {
+                            currentNode.Header += currentCharacter;
+                            continue;
+                        }
+
+                        if (!insideBlockBracketsStack.TryPeek(out _))
+                        {
+                            currentNode.Header += currentCharacter;
+
+                            var childToRemove = currentNode;
+                            currentNode = currentNode.Parent;
+
+                            if (string.IsNullOrWhiteSpace(childToRemove.Header))
+                            {
+                                currentNode.RemoveChild(childToRemove);
+                            }
+
+                            currentNode = currentNode.Parent;
+                        }
+                        else
+                        {
+                            insideBlockBracketsStack.Pop();
+                            currentNode.Header += currentCharacter;
+                        }
                     }
                 }
                 else
                 {
-                    if(currentNode.Level < 5)
+                    if (currentCharacter == ' ' && (previousCharacter == ';' || previousCharacter == '}'))
                     {
-                        if (currentCharacter == ' ' && (previousCharacter == ';' || previousCharacter == '}'))
-                        {
-                            continue;
-                        }
+                        continue;
+                    }
 
-                        currentNode.Header += currentCharacter;
-                    }
-                    else
-                    {
-                        currentNode.Data += currentCharacter;
-                    }
+                    currentNode.Header += currentCharacter;
                 }
 
                 previousPreviousCharacter = previousCharacter;
