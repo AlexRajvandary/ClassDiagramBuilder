@@ -20,6 +20,13 @@ namespace ClassDiagramBuilder.Models
             return typeParser.GetTypeInfos(syntaxTree);
         }
 
+        public async Task<List<TypeInfo>> AnalyzeFileAsync(string path)
+        {
+            var typeParser = new TypeParser();
+            var syntaxTree = await typeParser.GetFileMemberHirarchyAsync(path);
+            return await typeParser.GetTypeInfosAsync(syntaxTree);
+        }
+
         public Node<List<string>> BuildTree(string folder)
         {
             var tree = new Node<List<string>>();

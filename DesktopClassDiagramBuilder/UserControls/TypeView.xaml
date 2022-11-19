@@ -11,16 +11,21 @@
             BorderThickness="1"
             CornerRadius="6"
             >
-            <Grid Background="#FFCBCDCF">
+            <Grid Background="#FFCBCDCF" ScrollViewer.CanContentScroll="True">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="20"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition x:Name="field" Height="Auto"/>
+                    <RowDefinition Height="2"/>
+                    <RowDefinition x:Name="constructors" Height="Auto"/>
+                    <RowDefinition Height="2"/>
+                    <RowDefinition x:Name="events" Height="Auto"/>
+                    <RowDefinition Height="2"/>
+                    <RowDefinition x:Name="properties" Height="Auto"/>
+                    <RowDefinition Height="2"/>
+                    <RowDefinition x:Name="methods" Height="Auto"/>
                     <RowDefinition Height="2"/>
                 </Grid.RowDefinitions>
+
                 <TextBlock
                     Text="{Binding TypeInfo.Name, RelativeSource={RelativeSource AncestorType=local:TypeView}}"
                     HorizontalAlignment="Center"
@@ -32,55 +37,112 @@
                     Grid.Row="1"
                     Background="Transparent"
                     BorderBrush="Transparent"
-                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                    ScrollViewer.CanContentScroll="True"
                     FontFamily="Segoe UI Light"
                     ItemsSource="{Binding TypeInfo.Fields, RelativeSource={RelativeSource AncestorType=local:TypeView}}"
-                    />
+                    >
+                    <ListView.Style>
+                        <Style TargetType="ListView">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=ItemsSource.Count}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListView.Style>
+                </ListView>
+
+                <GridSplitter Grid.Row="2" Height="0.5" HorizontalAlignment="Stretch" Background="Black" ResizeBehavior="PreviousAndCurrent"/>
 
                 <ListView 
                     x:Name="ConstructorsList"
-                    Grid.Row="2"
+                    Grid.Row="3"
+                    Height="{Binding ElementName=constructors, Path=ActualHeight}"
                     Background="Transparent"
                     BorderBrush="Transparent"
-                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                    ScrollViewer.CanContentScroll="True"
                     FontFamily="Segoe UI Light"
                     ItemsSource="{Binding TypeInfo.Constructors, RelativeSource={RelativeSource AncestorType=local:TypeView}}"
-                    />
+                    >
+                    <ListView.Style>
+                        <Style TargetType="ListView">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=ItemsSource.Count}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListView.Style>
+                </ListView>
+
+                <GridSplitter Grid.Row="4" Height="0.5" HorizontalAlignment="Stretch" Background="Black"/>
 
                 <ListView 
                     x:Name="EventsList"
-                    Grid.Row="3"
+                    Grid.Row="5"
+                    Height="{Binding ElementName=events, Path=ActualHeight}"
                     Background="Transparent"
                     BorderBrush="Transparent"
-                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                    ScrollViewer.CanContentScroll="True"
                     FontFamily="Segoe UI Light"
                     ItemsSource="{Binding TypeInfo.Events, RelativeSource={RelativeSource AncestorType=local:TypeView}}"
-                    />
+                    >
+                    <ListView.Style>
+                        <Style TargetType="ListView">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=ItemsSource.Count}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListView.Style>
+                </ListView>
+
+                <GridSplitter Grid.Row="6" Height="0.5" HorizontalAlignment="Stretch" Background="Black"/>
 
                 <ListView 
                     x:Name="PropertiesList"
-                    Grid.Row="4"
+                    Grid.Row="7"
+                    Height="{Binding ElementName=properties, Path=ActualHeight}"
                     Background="Transparent"
                     BorderBrush="Transparent"
-                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                    ScrollViewer.CanContentScroll="True"
                     FontFamily="Segoe UI Light"
                     ItemsSource="{Binding TypeInfo.Properties, RelativeSource={RelativeSource AncestorType=local:TypeView}}"
-                    />
+                    >
+                    <ListView.Style>
+                        <Style TargetType="ListView">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=ItemsSource.Count}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListView.Style>
+                </ListView>
+
+                <GridSplitter Grid.Row="8" Height="0.5" HorizontalAlignment="Stretch" Background="Black"/>
 
                 <ListView 
                     x:Name="MethodsList"
-                    Grid.Row="5"
+                    Grid.Row="9"
+                    Height="{Binding ElementName=methods, Path=ActualHeight}"
                     Background="Transparent"
                     BorderBrush="Transparent"
-                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                    ScrollViewer.CanContentScroll="True"
                     FontFamily="Segoe UI Light"
                     ItemsSource="{Binding TypeInfo.Methods, RelativeSource={RelativeSource AncestorType=local:TypeView}}"
-                    />
+                    >
+                    <ListView.Style>
+                        <Style TargetType="ListView">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=ItemsSource.Count}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListView.Style>
+                </ListView>
             </Grid>
         </Border>
     </Grid>

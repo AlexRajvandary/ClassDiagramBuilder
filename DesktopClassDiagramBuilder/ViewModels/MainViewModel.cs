@@ -14,7 +14,7 @@ namespace DesktopClassDiagramBuilder.ViewModels
 {
     public class MainViewModel : PropertyChangedNotifier
     {
-        ICommand calculate;
+        IAsyncCommand calculate;
         private string path;
         private Graph<TypeInfo> types;
         private TypeInfo typeInfo;
@@ -24,11 +24,11 @@ namespace DesktopClassDiagramBuilder.ViewModels
         public MainViewModel()
         {
             projectAnalyzer = new ProjectAnalyzer();
-            calculate = new RelayCommand(GetTypeInfos);
+            calculate = new AsyncCommand(GetTypeInfos);
             TypeInfos = new ObservableCollection<TypeInfo>();
         }
 
-        public ICommand Calculate
+        public IAsyncCommand Calculate
         {
             get => calculate;
             set
@@ -78,26 +78,50 @@ namespace DesktopClassDiagramBuilder.ViewModels
             }
         }
 
-        public void GetTypeInfos()
+        public async Task GetTypeInfos()
         {
             projectAnalyzer = new ProjectAnalyzer();
             projectAnalyzer.FileExtensionsToAnalyze = new List<string>() { @".cs" };
             projectAnalyzer.FoldersToIgnore = new List<string>() { @".git", @".vs", @"bin", @"obj" };
 
-            var filesTree = projectAnalyzer.BuildTree(Path);
-
-            foreach(var file in ReadTree(filesTree))
+            if (string.IsNullOrWhiteSpace(Path))
             {
-                var typeInfos = projectAnalyzer.AnalyzeFile(file);
+                return;
+            }
 
-                if(typeInfos == null)
+            var r = System.IO.Path.GetFileName(Path);
+
+            if (!string.IsNullOrEmpty(r))
+            {
+                var typeInfos = await projectAnalyzer.AnalyzeFileAsync(Path);
+
+                if (typeInfos == null)
                 {
-                    continue;
+                    return;
                 }
 
                 foreach (var typeInfo in typeInfos)
                 {
                     TypeInfos.Add(typeInfo);
+                }
+            }
+            else 
+            {
+                var filesTree = projectAnalyzer.BuildTree(Path);
+
+                foreach (var filePath in ReadTree(filesTree))
+                {
+                    var typeInfos = await projectAnalyzer.AnalyzeFileAsync(filePath);
+
+                    if (typeInfos == null)
+                    {
+                        continue;
+                    }
+
+                    foreach (var typeInfo in typeInfos)
+                    {
+                        TypeInfos.Add(typeInfo);
+                    }
                 }
             }
         }
