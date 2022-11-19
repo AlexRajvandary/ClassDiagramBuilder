@@ -1,4 +1,5 @@
 ﻿using ClassDiagramBuilder.Models;
+using ClassDiagramBuilder.Models.TypeAnalyzerModels;
 
 namespace ClassDiagramBuilder
 {
@@ -18,18 +19,10 @@ namespace ClassDiagramBuilder
 
             filesTree = projectAnalyzer.BuildTree(@"C:\Users\Alex Raj\source\repos\ClassDiagramBuilder\ClassDiagramBuilder");
 
-            PrintTreesData(filesTree, PrintFile);
+            PrintTreesData(filesTree, Console.WriteLine);
 
             Console.ReadKey();
         }
-
-        private static void PrintFile(string path)
-        {
-            var syntaxTree = projectAnalyzer.AnalyzeFile(path);
-            PrintTree(syntaxTree, Print);
-        }
-
-        private static void Print(string stringToWrite) => Console.WriteLine(stringToWrite);
 
         static string GetRoot(string path, int level)
         {

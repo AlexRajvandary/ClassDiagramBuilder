@@ -102,8 +102,13 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
+                    
+                    <ListView Grid.Column="1" 
+                              Background="Gray"
+                              ItemsSource="{Binding MainViewModel.TypeInfos}" SelectedItem="{Binding MainViewModel.TypeInfo, Mode=OneWayToSource}"/>
 
-                    <localUI:TypeView TypeInfo="{Binding MainViewModel.TypeInfo}" Grid.Column="2"/>
+                    <localUI:TypeView TypeInfo="{Binding MainViewModel.TypeInfo}"
+                                      Grid.Column="2"/>
                 </Grid>
 
             </Grid>

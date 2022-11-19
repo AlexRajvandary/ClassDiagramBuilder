@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -17,12 +18,14 @@ namespace DesktopClassDiagramBuilder.ViewModels
         private string path;
         private Graph<TypeInfo> types;
         private TypeInfo typeInfo;
+        private ObservableCollection<TypeInfo> typeInfos;
         private static ProjectAnalyzer projectAnalyzer;
 
         public MainViewModel()
         {
             projectAnalyzer = new ProjectAnalyzer();
             calculate = new RelayCommand(GetTypeInfos);
+            TypeInfos = new ObservableCollection<TypeInfo>();
         }
 
         public ICommand Calculate
@@ -55,6 +58,16 @@ namespace DesktopClassDiagramBuilder.ViewModels
             }
         }
 
+        public ObservableCollection<TypeInfo> TypeInfos
+        {
+            get => typeInfos;
+            set
+            {
+                typeInfos = value;
+                OnPropertyChanged();
+            }
+        }
+
         public TypeInfo TypeInfo
         {
             get => typeInfo;
@@ -67,7 +80,57 @@ namespace DesktopClassDiagramBuilder.ViewModels
 
         public void GetTypeInfos()
         {
-            TypeInfo = projectAnalyzer?.AnalyzeFile(Path)?.FirstOrDefault();
+            projectAnalyzer = new ProjectAnalyzer();
+            projectAnalyzer.FileExtensionsToAnalyze = new List<string>() { @".cs" };
+            projectAnalyzer.FoldersToIgnore = new List<string>() { @".git", @".vs", @"bin", @"obj" };
+
+            var filesTree = projectAnalyzer.BuildTree(Path);
+
+            foreach(var file in ReadTree(filesTree))
+            {
+                var typeInfos = projectAnalyzer.AnalyzeFile(file);
+
+                if(typeInfos == null)
+                {
+                    continue;
+                }
+
+                foreach (var typeInfo in typeInfos)
+                {
+                    TypeInfos.Add(typeInfo);
+                }
+            }
+        }
+
+        private List<string> ReadTree(Node<List<string>> treeToRead)
+        {
+            if (treeToRead == null || (!treeToRead?.Data?.Any() ?? true))
+            {
+                return null;
+            }
+
+            var data = new List<string>();
+
+            foreach (var file in treeToRead.Data)
+            {
+                data.Add(file);
+            }
+
+            if (!treeToRead?.Children?.Any() ?? true)
+            {
+                return data;
+            }
+
+            foreach (var folder in treeToRead.Children)
+            {
+                var filesFromFolder = ReadTree(folder);
+                if (filesFromFolder != null)
+                {
+                    data.AddRange(ReadTree(folder));
+                }
+            }
+
+            return data;
         }
     }
 }

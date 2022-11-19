@@ -207,7 +207,7 @@ namespace ClassDiagramBuilder.Models.Parser
 
             if (string.IsNullOrWhiteSpace(data) || !typeInfoHeaderPattern.IsMatch(data))
             {
-                throw new Exception($"{data} is invalid.");
+                return null;
             }
 
             var typeInfoHeader = typeInfoHeaderPattern.Match(data);
