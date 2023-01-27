@@ -6,25 +6,98 @@
              xmlns:local="clr-namespace:DesktopClassDiagramBuilder.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="100" Name="typeView">
+    <UserControl.Resources>
+        <Style TargetType="TextBlock" x:Key="Font">
+            <Setter Property="FontFamily" Value="Calibri"/>
+        </Style>
+    </UserControl.Resources>
     <Grid>
-        <StackPanel Orientation="Vertical">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding ElementName=typeView, Path=TypeInfo.AcsessModifier}"/>
-                <TextBlock Text="{Binding ElementName=typeView, Path=TypeInfo.Name}"/>
+        <GroupBox>
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding ElementName=typeView, Path=TypeInfo.AcsessModifier}" Style="{StaticResource Font}"/>
+                    <TextBlock Text="{Binding ElementName=typeView, Path=TypeInfo.Name}" Style="{StaticResource Font}"/>
+                </StackPanel>
+                <Expander Header="Поля">
+                    <ListView ItemsSource="{Binding ElementName=typeView, Path=TypeInfo.Fields}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding AcsessModifier}" Style="{StaticResource Font}"/>
+                                    <TextBlock Text=" "/>
+                                    <TextBlock Text="{Binding TypeName}" Style="{StaticResource Font}"/>
+                                    <TextBlock Text=" "/>
+                                    <TextBlock Text="{Binding Name}" Style="{StaticResource Font}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Expander>
+                <Expander Header="Конструкторы">
+                    <ListView ItemsSource="{Binding ElementName=typeView, Path=TypeInfo.Constructors}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding AcsessModifier}" Style="{StaticResource Font}"/>
+                                    <TextBlock Text=" "/>
+                                    <TextBlock Text="{Binding Name}" Style="{StaticResource Font}"/>
+                                    <TextBlock Text=" "/>
+                                    <TextBlock Text="()" Style="{StaticResource Font}"/>
+                                </StackPanel>
+                                
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Expander>
+                <Expander Header="События">
+                    <ListView ItemsSource="{Binding ElementName=typeView, Path=TypeInfo.Events}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding AcsessModifier}" Style="{StaticResource Font}"/>
+                                    <TextBlock Text=" "/>
+                                    <TextBlock Text="{Binding DelegateType}" Style="{StaticResource Font}"/>
+                                    <TextBlock Text=" "/>
+                                    <TextBlock Text="{Binding Name}" Style="{StaticResource Font}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Expander>
+                <Expander Header="Свойсвта">
+                    <ListView ItemsSource="{Binding ElementName=typeView, Path=TypeInfo.Properties}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding AcsessModifier}" Style="{StaticResource Font}"/>
+                                    <TextBlock Text=" "/>
+                                    <TextBlock Text="{Binding Name}"  Style="{StaticResource Font}"/>
+                                    <TextBlock Text=" {"/>
+                                    <TextBlock Text="{Binding SetterAcsessModifier}"  Style="{StaticResource Font}"/>
+                                    <TextBlock Text=";"/>
+                                    <TextBlock Text="{Binding GetterAcsessModifier}"  Style="{StaticResource Font}"/>
+                                    <TextBlock Text=";"/>
+                                    <TextBlock Text="}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Expander>
+                <Expander Header="Методы">
+                    <ListView ItemsSource="{Binding ElementName=typeView, Path=TypeInfo.Methods}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding AcsessModifier}" Style="{StaticResource Font}"/>
+                                    <TextBlock Text=" "/>
+                                    <TextBlock Text="{Binding Name}" Style="{StaticResource Font}"/>
+                                    <TextBlock Text=" ()"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Expander>
             </StackPanel>
-            
-            <Expander Header="Поля">
-                <ListView ItemsSource="{Binding ElementName=typeView, Path=TypeInfo.Fields}"/>
-            </Expander>
-            <Expander Header="Конструкторы">
-                <ListView ItemsSource="{Binding ElementName=typeView, Path=TypeInfo.Constructors}"/>
-            </Expander>
-            <Expander Header="Свойсвта">
-                <ListView ItemsSource="{Binding ElementName=typeView, Path=TypeInfo.Properties}"/>
-            </Expander>
-            <Expander Header="Методы">
-                <ListView ItemsSource="{Binding ElementName=typeView, Path=TypeInfo.Methods}"/>
-            </Expander>
-        </StackPanel>
+        </GroupBox>
     </Grid>
 </UserControl>

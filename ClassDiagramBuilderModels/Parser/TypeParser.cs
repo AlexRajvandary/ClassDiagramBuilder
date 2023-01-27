@@ -51,7 +51,7 @@ namespace ClassDiagramBuilder.Models.Parser
             data = Regex.Replace(data, @"\s+", " ");
             if (AreBracketsBalanced(data))
             {
-                var fileMemberHirarchy = await GetFileMembersTreeAsync(Path.GetFileName(path), data, parseDepth);
+                var fileMemberHirarchy = GetFileMembersTreeAsync(Path.GetFileName(path), data, parseDepth);
                 return fileMemberHirarchy;
             }
             else
@@ -123,7 +123,7 @@ namespace ClassDiagramBuilder.Models.Parser
                 var rawTypeInfos = FileMemberHirarchy.Children.LastOrDefault().Children;
                 foreach (var rawTypeInfo in rawTypeInfos)
                 {
-                    var typeInfo = await BuildTypeInfoAsync(rawTypeInfo);
+                    var typeInfo = BuildTypeInfoAsync(rawTypeInfo);
                     if (typeInfo != null)
                     {
                         typeInfos.Add(typeInfo);
@@ -254,7 +254,7 @@ namespace ClassDiagramBuilder.Models.Parser
             return root;
         }
 
-        private async Task<Node<string>> GetFileMembersTreeAsync(string filename, string fileRawContent, int parseDepth)
+        private Node<string> GetFileMembersTreeAsync(string filename, string fileRawContent, int parseDepth)
         {
             var insideBlockBracketsStack = new Stack<char>();
             var root = new Node<string>();
@@ -516,7 +516,7 @@ namespace ClassDiagramBuilder.Models.Parser
             return typeInfo;
         }
 
-        private async Task<TypeInfo> BuildTypeInfoAsync(Node<string> rawTypeInfo)
+        private TypeInfo BuildTypeInfoAsync(Node<string> rawTypeInfo)
         {
             if (string.IsNullOrEmpty(currentNameSpace))
             {
