@@ -5,145 +5,26 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DesktopClassDiagramBuilder.UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="150" d:DesignWidth="100">
+             d:DesignHeight="150" d:DesignWidth="100" Name="typeView">
     <Grid>
-        <Border
-            BorderThickness="1"
-            CornerRadius="6"
-            >
-            <Grid Background="#FFCBCDCF" ScrollViewer.CanContentScroll="True">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="20"/>
-                    <RowDefinition x:Name="field" Height="Auto"/>
-                    <RowDefinition Height="2"/>
-                    <RowDefinition x:Name="constructors" Height="Auto"/>
-                    <RowDefinition Height="2"/>
-                    <RowDefinition x:Name="events" Height="Auto"/>
-                    <RowDefinition Height="2"/>
-                    <RowDefinition x:Name="properties" Height="Auto"/>
-                    <RowDefinition Height="2"/>
-                    <RowDefinition x:Name="methods" Height="Auto"/>
-                    <RowDefinition Height="2"/>
-                </Grid.RowDefinitions>
-
-                <TextBlock
-                    Text="{Binding TypeInfo.Name, RelativeSource={RelativeSource AncestorType=local:TypeView}}"
-                    HorizontalAlignment="Center"
-                    FontFamily="Segoe UI Light"
-                    FontSize="15"/>
-
-                <ListView 
-                    x:Name="FieldList"
-                    Grid.Row="1"
-                    Background="Transparent"
-                    BorderBrush="Transparent"
-                    FontFamily="Segoe UI Light"
-                    ItemsSource="{Binding TypeInfo.Fields, RelativeSource={RelativeSource AncestorType=local:TypeView}}"
-                    >
-                    <ListView.Style>
-                        <Style TargetType="ListView">
-                            <Setter Property="Visibility" Value="Visible"/>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=ItemsSource.Count}" Value="0">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ListView.Style>
-                </ListView>
-
-                <GridSplitter Grid.Row="2" Height="0.5" HorizontalAlignment="Stretch" Background="Black" ResizeBehavior="PreviousAndCurrent"/>
-
-                <ListView 
-                    x:Name="ConstructorsList"
-                    Grid.Row="3"
-                    Height="{Binding ElementName=constructors, Path=ActualHeight}"
-                    Background="Transparent"
-                    BorderBrush="Transparent"
-                    FontFamily="Segoe UI Light"
-                    ItemsSource="{Binding TypeInfo.Constructors, RelativeSource={RelativeSource AncestorType=local:TypeView}}"
-                    >
-                    <ListView.Style>
-                        <Style TargetType="ListView">
-                            <Setter Property="Visibility" Value="Visible"/>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=ItemsSource.Count}" Value="0">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ListView.Style>
-                </ListView>
-
-                <GridSplitter Grid.Row="4" Height="0.5" HorizontalAlignment="Stretch" Background="Black"/>
-
-                <ListView 
-                    x:Name="EventsList"
-                    Grid.Row="5"
-                    Height="{Binding ElementName=events, Path=ActualHeight}"
-                    Background="Transparent"
-                    BorderBrush="Transparent"
-                    FontFamily="Segoe UI Light"
-                    ItemsSource="{Binding TypeInfo.Events, RelativeSource={RelativeSource AncestorType=local:TypeView}}"
-                    >
-                    <ListView.Style>
-                        <Style TargetType="ListView">
-                            <Setter Property="Visibility" Value="Visible"/>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=ItemsSource.Count}" Value="0">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ListView.Style>
-                </ListView>
-
-                <GridSplitter Grid.Row="6" Height="0.5" HorizontalAlignment="Stretch" Background="Black"/>
-
-                <ListView 
-                    x:Name="PropertiesList"
-                    Grid.Row="7"
-                    Height="{Binding ElementName=properties, Path=ActualHeight}"
-                    Background="Transparent"
-                    BorderBrush="Transparent"
-                    FontFamily="Segoe UI Light"
-                    ItemsSource="{Binding TypeInfo.Properties, RelativeSource={RelativeSource AncestorType=local:TypeView}}"
-                    >
-                    <ListView.Style>
-                        <Style TargetType="ListView">
-                            <Setter Property="Visibility" Value="Visible"/>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=ItemsSource.Count}" Value="0">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ListView.Style>
-                </ListView>
-
-                <GridSplitter Grid.Row="8" Height="0.5" HorizontalAlignment="Stretch" Background="Black"/>
-
-                <ListView 
-                    x:Name="MethodsList"
-                    Grid.Row="9"
-                    Height="{Binding ElementName=methods, Path=ActualHeight}"
-                    Background="Transparent"
-                    BorderBrush="Transparent"
-                    FontFamily="Segoe UI Light"
-                    ItemsSource="{Binding TypeInfo.Methods, RelativeSource={RelativeSource AncestorType=local:TypeView}}"
-                    >
-                    <ListView.Style>
-                        <Style TargetType="ListView">
-                            <Setter Property="Visibility" Value="Visible"/>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=ItemsSource.Count}" Value="0">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ListView.Style>
-                </ListView>
-            </Grid>
-        </Border>
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding ElementName=typeView, Path=TypeInfo.AcsessModifier}"/>
+                <TextBlock Text="{Binding ElementName=typeView, Path=TypeInfo.Name}"/>
+            </StackPanel>
+            
+            <Expander Header="Поля">
+                <ListView ItemsSource="{Binding ElementName=typeView, Path=TypeInfo.Fields}"/>
+            </Expander>
+            <Expander Header="Конструкторы">
+                <ListView ItemsSource="{Binding ElementName=typeView, Path=TypeInfo.Constructors}"/>
+            </Expander>
+            <Expander Header="Свойсвта">
+                <ListView ItemsSource="{Binding ElementName=typeView, Path=TypeInfo.Properties}"/>
+            </Expander>
+            <Expander Header="Методы">
+                <ListView ItemsSource="{Binding ElementName=typeView, Path=TypeInfo.Methods}"/>
+            </Expander>
+        </StackPanel>
     </Grid>
 </UserControl>

@@ -21,19 +21,8 @@ namespace DesktopClassDiagramBuilder.UserControls
     /// </summary>
     public partial class TypeView : UserControl
     {
-        public static readonly DependencyProperty typeInfoProperty = DependencyProperty.Register("TypeInfo", typeof(TypeInfo), typeof(TypeView), new PropertyMetadata(null, ResizeUserControl));
- 
-        private static void ResizeUserControl(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if(d is TypeView typeView)
-            {
-                var listItemHeight = typeView.FontSize + 2;
-                typeView.FieldList.Height = typeView.TypeInfo.Fields.Count * listItemHeight;
-                typeView.ConstructorsList.Height = typeView.TypeInfo.Constructors.Count * listItemHeight;
-                typeView.PropertiesList.Height = typeView.TypeInfo.Properties.Count * listItemHeight;
-                typeView.MethodsList.Height = typeView.TypeInfo.Methods.Count * listItemHeight;
-            }
-        }
+        public static readonly DependencyProperty typeInfoProperty = DependencyProperty.Register("TypeInfo", typeof(TypeInfo), typeof(TypeView), new PropertyMetadata(null));
+
 
         public TypeView()
         {
